@@ -5,17 +5,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import User, Group, Language
-from utils.print_links_to_join import get_links_to_join
+from utils.keyboards import get_lang_keyboard, get_admin_panel_keyboard
 
 router = Router()
-
-# Клавиатура выбора языка
-def get_lang_keyboard():
-    from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-    return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🇷🇺 Русский", callback_data="set_lang:ru")],
-        [InlineKeyboardButton(text="🇬🇧 English", callback_data="set_lang:en")]
-    ])
 
 @router.message(CommandStart(deep_link=True))
 @router.message(Command("start"))
@@ -23,15 +15,22 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
     # Регистрация пользователя
     user_id = message.from_user.id
     lang_code = message.from_user.language_code[:2]
+    # нету аргументов
+    if not command.args:
+        if await session.get(User, user_id):
+            await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
+            return
+        await message.answer("Нононо мистер фиш, нужна ссылочка")
+        return
+    # есть аргументы
     try:
         _, user_group, _, password = command.args.split("-")
-        print(command.args.split("-"))
         group = await session.scalar(select(Group).where(Group.name == user_group))
     except Exception as e:
         await message.answer("Неправильная ссылка / Incorrect link")
         print(e)
         return
-
+    # есть аргументы правильного формата
     if not group:
         await message.answer("Неправильная группа / Incorrect group")
         return
@@ -54,6 +53,14 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
         await message.answer("Вы перемещены в группу {} / You are moved to group {}".format(group.name, group.name))
 
     await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
+
+
+@router.message(Command("admin"))
+async def admin(message: Message, session: AsyncSession, bot: Bot):
+    if message.from_user.id in [1722948286]:
+        await message.answer("Admin panel", reply_markup=get_admin_panel_keyboard())
+    else:
+        await message.answer("Ты не админ, бебебе")
 
 
 @router.callback_query(F.data.startswith("set_lang:"))

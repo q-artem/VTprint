@@ -20,8 +20,9 @@ from aiogram.utils.i18n import gettext as _
 
 from middlewares.i18n_db import I18nDatabaseMiddleware
 
-import handlers.files
+import handlers.printer
 import handlers.user
+import utils.admin_utils
 
 DEBUG = True
 
@@ -51,7 +52,8 @@ async def main():
 
     # роутеры
     dp.include_router(handlers.user.router)
-    dp.include_router(handlers.files.router)
+    dp.include_router(handlers.printer.router)
+    dp.include_router(utils.admin_utils.router)
 
 
     await init_db()
