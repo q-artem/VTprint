@@ -3,42 +3,65 @@ import logging
 import tempfile
 from asyncio import create_subprocess_exec
 
+from aiogram.client.default import DefaultBotProperties
+
+from utils.config_reader import config
+
 from aiogram import Bot, Dispatcher, F, types
-from aiogram.enums import ContentType
-from aiogram.filters.command import Command
+from aiogram.enums import ContentType, ParseMode
 
-logging.basicConfig(level=logging.INFO)
+from database.session import init_db, async_session_maker
+from middlewares.db import DatabaseSessionMiddleware
+from middlewares.i18n import i18n
+
+from aiogram.utils.i18n import gettext as _
+
+from middlewares.i18n_db import I18nDatabaseMiddleware
+
+import handlers.files
+import handlers.user
+
+DEBUG = True
+
+async def main():
+    logging.basicConfig(level=logging.INFO)
+
+    API_TOKEN = config.bot_token.get_secret_value()
+
+    bot = Bot(token=API_TOKEN,
+              default=DefaultBotProperties(
+                  parse_mode=ParseMode.HTML,
+              ))
+
+    dp = Dispatcher()
 
 
-API_TOKEN = "8439783657:AAHtTpLuNA6jW2XmDejxHaVcXvIjljIggXs"
-
-bot = Bot(token=API_TOKEN)
-dp = Dispatcher()
 
 
-@dp.message(Command("start"))
-async def send_welcome(message: types.Message):
-    await message.answer(
-        "Привет!\nОтправь мне любой файл, и я сохраню его во временное хранилище."
+    # мидлвари
+    dp.message.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
+    dp.callback_query.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
+
+    # i18n
+    i18n_db_middleware = I18nDatabaseMiddleware(
+        session_pool=async_session_maker,
+        i18n=i18n
     )
 
+    dp.message.outer_middleware(i18n_db_middleware)
+    dp.callback_query.outer_middleware(i18n_db_middleware)
 
-@dp.message(F.content_type == ContentType.DOCUMENT)
-async def handle_document(message: types.Message):
-    assert message.document is not None
 
-    with tempfile.NamedTemporaryFile("wb") as file:
-        await bot.download(message.document, file.name)
 
-        await message.reply("Файл отправлен на печать")
-        process = await create_subprocess_exec(
-            "lp",
-            "-d",
-            "Canon_MF4400_Series",
-            file.name,
-        )
-        await process.wait()
+
+    # роутеры
+    dp.include_router(handlers.user.router)
+    dp.include_router(handlers.files.router)
+
+
+    await init_db()
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    asyncio.run(dp.start_polling(bot))
+    asyncio.run(main())

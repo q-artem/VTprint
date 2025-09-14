@@ -1,0 +1,1 @@
+pybabel extract -o locales/messages.pot --copyright-holder="Artem Pshenichnikov" --project="VT Print" --version=0.1 --msgid-bugs-address=t.me/j.artem --input-dirs=.
