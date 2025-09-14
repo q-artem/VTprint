@@ -17,7 +17,7 @@ def get_lang_keyboard():
     ])
 
 @router.message(Command("start"))
-async def cmd_start(message: Message, i18n: I18nContext, session: AsyncSession):
+async def cmd_start(message: Message, session: AsyncSession):
     # Регистрация пользователя
     user_id = message.from_user.id
     lang_code = message.from_user.language_code[:2]
@@ -25,12 +25,11 @@ async def cmd_start(message: Message, i18n: I18nContext, session: AsyncSession):
     db_user = await session.get(User, user_id)
     if not db_user:
         # Найти или создать группу по умолчанию
-        group = await session.get(Group, 1)
+        group = await session.get(Group, -100)
         if not group:
-            group = Group(name="Default", id=-100, sheets_per_day=5)
+            group = Group(name="Default", id=-100, sheets_per_day=5, password="")
             session.add(group)
             await session.commit()
-            await session.refresh(group)
 
         # Найти язык
         language = await session.get(Language, lang_code)
@@ -41,10 +40,10 @@ async def cmd_start(message: Message, i18n: I18nContext, session: AsyncSession):
         session.add(db_user)
         await session.commit()
 
-    await message.answer(i18n.start(), reply_markup=get_lang_keyboard())
+    await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
 
 @router.callback_query(F.data.startswith("set_lang:"))
-async def set_lang(callback: CallbackQuery, i18n: I18nContext, session: AsyncSession):
+async def set_lang(callback: CallbackQuery, session: AsyncSession, __):
     lang_code = callback.data.split(":")[1]
     user_id = callback.from_user.id
 
@@ -53,8 +52,7 @@ async def set_lang(callback: CallbackQuery, i18n: I18nContext, session: AsyncSes
         db_user.language_code = lang_code
         await session.commit()
 
-    await i18n.set_locale(callback, lang_code)
-    await callback.message.edit_text(i18n.lang_changed())
+    await callback.message.answer(__("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
     await callback.answer()
 
 @router.message(Command("me"))

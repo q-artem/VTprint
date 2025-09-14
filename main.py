@@ -42,16 +42,8 @@ async def main():
     dp.message.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
     dp.callback_query.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
 
-    # i18n
-    i18n_db_middleware = I18nDatabaseMiddleware(
-        session_pool=async_session_maker,
-        i18n=i18n
-    )
-
-    dp.message.outer_middleware(i18n_db_middleware)
-    dp.callback_query.outer_middleware(i18n_db_middleware)
-
-
+    dp.message.outer_middleware(I18nDatabaseMiddleware())
+    dp.callback_query.outer_middleware(I18nDatabaseMiddleware())
 
 
     # роутеры

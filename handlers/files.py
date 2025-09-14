@@ -16,7 +16,7 @@ router = Router()
 
 
 @router.message(F.content_type == ContentType.DOCUMENT)
-async def handle_document(message: types.Message, bot: Bot, locale: I18nContext):
+async def handle_document(message: types.Message, bot: Bot, _):
     assert message.document is not None
 
     with tempfile.NamedTemporaryFile("wb") as file:
@@ -32,4 +32,3 @@ async def handle_document(message: types.Message, bot: Bot, locale: I18nContext)
                 file.name,
             )
             await process.wait()
-        await message.answer("Блаблабла")

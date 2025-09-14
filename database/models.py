@@ -16,6 +16,7 @@ class Group(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     sheets_per_day = Column(Integer, nullable=False)
+    password = Column(String(50), nullable=False)
 
     users = relationship("User", back_populates="group")
 
