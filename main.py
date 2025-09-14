@@ -5,6 +5,8 @@ from asyncio import create_subprocess_exec
 
 from aiogram.client.default import DefaultBotProperties
 
+from database.setup_start_data import init_start_data
+from middlewares.block_nuregistreted import BlockUnregisteredMiddleware
 from utils.config_reader import config
 
 from aiogram import Bot, Dispatcher, F, types
@@ -36,11 +38,12 @@ async def main():
     dp = Dispatcher()
 
 
-
-
     # мидлвари
     dp.message.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
     dp.callback_query.outer_middleware(DatabaseSessionMiddleware(async_session_maker))
+
+    dp.message.outer_middleware(BlockUnregisteredMiddleware())
+    dp.callback_query.outer_middleware(BlockUnregisteredMiddleware())
 
     dp.message.outer_middleware(I18nDatabaseMiddleware())
     dp.callback_query.outer_middleware(I18nDatabaseMiddleware())
@@ -52,6 +55,7 @@ async def main():
 
 
     await init_db()
+    await init_start_data()
     await dp.start_polling(bot)
 
 

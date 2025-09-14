@@ -5,7 +5,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from middlewares.i18n import i18n
 
-
 from database.models import User  # твои модели
 
 
@@ -29,21 +28,19 @@ class I18nDatabaseMiddleware(BaseMiddleware):
         return i18n.default_locale
 
     async def __call__(
-        self,
-        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-        event: Message | CallbackQuery,
-        data: Dict[str, Any],
+            self,
+            handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
+            event: Message | CallbackQuery,
+            data: Dict[str, Any],
     ) -> Any:
         locale = await self.get_locale(event, data)
 
-        def _(text: str) -> str:
+        def _(text: str, curr_locale: str | None = None) -> str:
+            if curr_locale:
+                return i18n.gettext(text, locale=curr_locale)
             return i18n.gettext(text, locale=locale)
-
-        def __(text: str, lasy_locale: str) -> str:
-            return i18n.gettext(text, locale=lasy_locale)
 
         data["locale"] = locale
         data["_"] = _
-        data["__"] = __
 
         return await handler(event, data)
