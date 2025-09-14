@@ -1,15 +1,9 @@
-
-from aiogram import Router, F
+from aiogram import Router, Bot, F, types
 from aiogram.enums import ContentType
-from aiogram.types import Message
-from aiogram import Bot, Dispatcher, F, types
 import tempfile
-
-from aiogram_i18n import I18nContext
 
 from main import DEBUG
 from asyncio import create_subprocess_exec
-from aiogram.utils.i18n import gettext as _
 
 
 router = Router()

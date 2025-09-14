@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base
+from database.base import Base
 
 class Language(Base):
     __tablename__ = "languages"

@@ -1,7 +1,6 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
-from aiogram_i18n import I18nContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import User, Group, Language
@@ -54,17 +53,3 @@ async def set_lang(callback: CallbackQuery, session: AsyncSession, __):
 
     await callback.message.answer(__("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
     await callback.answer()
-
-@router.message(Command("me"))
-async def cmd_me(message: Message, i18n: I18nContext, session: AsyncSession):
-    user = await session.get(User, message.from_user.id)
-    if not user:
-        await message.answer("Not found")
-        return
-
-    await message.answer(i18n.profile(
-        user_id=user.user_id,
-        lang=user.language.name,
-        group=user.group.name,
-        sheets=user.group.sheets_per_day
-    ))
