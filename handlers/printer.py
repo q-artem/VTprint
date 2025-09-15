@@ -40,10 +40,10 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
     with tempfile.NamedTemporaryFile("wb") as file:
         await bot.download(message.document.file_id, file.name)              ##########################
 
-        file_name = file.name
+        document_name = message.document.file_name
         pages_pdf = len(PdfReader(file).pages)
 
-        file_info = await build_file_info_message(_, file_name, message.document.file_size, pages_pdf, pages_available=(await session.get(User, message.from_user.id)).pages_amount)
+        file_info = await build_file_info_message(_, document_name, message.document.file_size, pages_pdf, pages_available=(await session.get(User, message.from_user.id)).pages_left)
         if wait_message:
             await wait_message.edit_text(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_pdf,
                                                                                               message.message_id))
@@ -51,7 +51,6 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
             await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_pdf,
                                                                                       message.message_id))
 
-        await message.reply(_("file_info"))
         await message.reply(_("file_sent_to_print"))
         print(message.document)
 
@@ -61,6 +60,7 @@ async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, stat
 
     await callback.message.answer(_("page_range_selected") + str(callback_data.file_pages_amount))
     await state.set_state(GetPagesState.getting_pages)
+    await callback.answer()
 
 @router.message(GetPagesState.getting_pages)
 async def handle_get_pages(message: types.Message, bot: Bot, state: FSMContext, _):
