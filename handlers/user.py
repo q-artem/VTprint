@@ -43,14 +43,14 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
         language = await session.get(Language, lang_code)
         if not language:
             language = await session.get(Language, "en")
-        db_user = User(user_id=user_id, language_code=language.code, group_id=group.id)
+        db_user = User(user_id=user_id, language_code=language.code, group_id=group.id, pages_left=group.sheets_per_day)
         session.add(db_user)
         await session.commit()
-        await message.answer("Вы добавлены в группу {} / You are added to group {}".format(group.name, group.name))
+        await message.answer("Вы добавлены в группу {}. Вам доступно {} страниц в день / You are added to group {}. You have access to {} pages per day".format(group.name, group.sheets_per_day, group.name, group.sheets_per_day))
     else:
         db_user.group_id = group.id
         await session.commit()
-        await message.answer("Вы перемещены в группу {} / You are moved to group {}".format(group.name, group.name))
+        await message.answer("Вы перемещены в группу {}. Новые страницы будут зачислены завтра в соответствии с вашей новой группой / You are moved to group {}. New pages will be added tomorrow according to your new group".format(group.name, group.name))
 
     await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
 

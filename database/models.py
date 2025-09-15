@@ -26,6 +26,7 @@ class User(Base):
     user_id = Column(Integer, primary_key=True)
     language_code = Column(String(2), ForeignKey("languages.code"), nullable=False)
     group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
+    pages_left = Column(Integer, nullable=False)
 
     language = relationship("Language", back_populates="users")
     group = relationship("Group", back_populates="users")
