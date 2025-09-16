@@ -27,15 +27,15 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
         _, user_group, _, password = command.args.split("-")
         group = await session.scalar(select(Group).where(Group.name == user_group))
     except Exception as e:
-        await message.answer("Неправильная ссылка / Incorrect link")
+        await message.answer("Неправильная ссылка / Invalid link")
         print(e)
         return
     # есть аргументы правильного формата
     if not group:
-        await message.answer("Неправильная группа / Incorrect group")
+        await message.answer("Неправильная группа / Invalid group")
         return
     if group.password != password:
-        await message.answer("Неправильный пароль / Incorrect password")
+        await message.answer("Неправильный пароль / Invalid password")
         return
     # тут группа и пароль совпали
     db_user = await session.get(User, user_id)
@@ -46,11 +46,11 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
         db_user = User(user_id=user_id, language_code=language.code, group_id=group.id, pages_left=group.sheets_per_day)
         session.add(db_user)
         await session.commit()
-        await message.answer("Вы добавлены в группу {}. Вам доступно {} страниц в день / You are added to group {}. You have access to {} pages per day".format(group.name, group.sheets_per_day, group.name, group.sheets_per_day))
+        await message.answer("Вы добавлены в группу {}. Вам доступно {} страниц в день / Success. You're in the {} group now. Each day you can print {} pages.".format(group.name, group.sheets_per_day, group.name, group.sheets_per_day))
     else:
         db_user.group_id = group.id
         await session.commit()
-        await message.answer("Вы перемещены в группу {}. Новые страницы будут зачислены завтра в соответствии с вашей новой группой / You are moved to group {}. New pages will be added tomorrow according to your new group".format(group.name, group.name))
+        await message.answer("Вы перемещены в группу {}. Новые страницы будут зачислены завтра в соответствии с вашей новой группой / You are moved to group {}. You'll get your new group's set of pages tomorrow.".format(group.name, group.name))
 
     await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
 
