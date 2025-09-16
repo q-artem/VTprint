@@ -6,3 +6,8 @@ class ChoicePageRangeCallbackFactory(CallbackData, prefix="choice_page_range"):
     message_with_file_id: int
 
     # Optional[int] = None
+
+class AcceptPrintFileCallbackFactory(CallbackData, prefix="accept_print_file"):
+    file_pages_amount: int
+    message_with_file_id: int
+    pages_ranges: str
