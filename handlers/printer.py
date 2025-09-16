@@ -14,8 +14,8 @@ from database.models import User
 from main import DEBUG
 from asyncio import create_subprocess_exec
 
-from utils.FSM import GetPagesState
-from utils.callback_factory import ChoicePageRangeCallbackFactory
+from utils.FSM import GetPagesState, PrintStates
+from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory
 from utils.files_utils import get_file, delete_file
 from utils.keyboards import get_print_file_menu_keyboard
 from aiogram.utils.chat_action import ChatActionSender
@@ -23,9 +23,9 @@ from aiogram.utils.chat_action import ChatActionSender
 router = Router()
 
 
-@router.message(F.content_type == ContentType.DOCUMENT)
-async def handle_document(message: types.Message, bot: Bot, session: AsyncSession, _):
-    assert message.document is not None  # на всякий случайэ
+@router.message(F.content_type == ContentType.DOCUMENT, StateFilter(None))
+async def handle_document(message: types.Message, bot: Bot, session: AsyncSession, state: FSMContext, _):
+    assert message.document is not None  # на всякий случай
 
     if not (message.document.file_name.endswith(".pdf") and message.document.mime_type == "application/pdf"):
         await message.reply(_("file_is_not_pdf"))
@@ -38,38 +38,42 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
     file = await get_file(message, bot)
 
     document_name = message.document.file_name
-    pages_pdf = len(PdfReader(file).pages)
+    pages_total = len(PdfReader(file).pages)
 
-    file_info = await build_file_info_message(_, document_name, message.document.file_size,
-                                              pages_pdf, pages_available=(await session.get(User, message.from_user.id)).pages_left)
+    await state.update_data(
+        file_id=message.document.file_id,
+        file_name=message.document.file_name,
+        file_size_converted=await convert_file_size(message.document.file_size),
+        pages_total=pages_total,
+        pages_ranges="",
+        pages_to_print=pages_total,  # страниц к печати
+        copies=1,
+    )
 
-    await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_pdf,
+    file_info = await build_file_info_message(_, state, session, message.from_user.id)
+
+    await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_total,
                                                                               message.message_id))
 
     await message.reply(_("file_sent_to_print"))
     print(message.document)
 
-    await delete_file(message) ############################3
-
 
 @router.callback_query(StateFilter(None), ChoicePageRangeCallbackFactory.filter())
-async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, state: FSMContext, callback_data: ChoicePageRangeCallbackFactory, _):
-
-    await callback.message.answer(_("page_range_selected") + str(callback_data.file_pages_amount))
+async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
+    await callback.message.answer(_("page_range_selecting").format((await state.get_data())["pages_total"]))
     await state.set_state(GetPagesState.getting_pages)
     await callback.answer()
 
 
 @router.message(GetPagesState.getting_pages)
 async def handle_get_pages(message: types.Message, bot: Bot, state: FSMContext, _):
-
     if not await validate_pages_ranges(message, message.text, _):
         return
 
     count = await count_pages(message.text)
 
     await message.answer(_("pages") + str(message.text))
-
 
     await state.clear()
 
@@ -115,20 +119,24 @@ async def count_pages(pages_ranges: str) -> int:
     return count
 
 
-async def build_file_info_message(_, file_name: str | None = None, file_size: int | None = None,
-                                  pages_amount: int | None = None, pages_ranges: str | None = None,
-                                  pages_to_print : int | None = None, pages_available: int | None = None) -> str:
+async def build_file_info_message(_, state: FSMContext, session: AsyncSession, user_id: int) -> str:
+    fsm_data = await state.get_data()
+
+    file_id = fsm_data.get("file_id")
+    file_name = fsm_data.get("file_name")
+    file_size_converted = fsm_data.get("file_size_converted")
+    pages_amount = fsm_data.get("pages_amount")
+
+    pages_ranges = fsm_data.get("pages_ranges")
+    pages_to_print = fsm_data.get("pages_to_print")
+
+    pages_available = (await session.get(User, user_id)).pages_left
+
     _str = ""
     if file_name:
         _str += _("file_name") + html.escape(file_name) + "\n"
-    if file_size:
-        if file_size < 700:
-            file_size = str(file_size) + " B"
-        elif file_size < 700 * 1024:
-            file_size = str(round(file_size / 1024, 2)) + " KB"
-        else:
-            file_size = str(round(file_size / 1024 / 1024, 2)) + " MB"
-        _str += _("file_size") + file_size + "\n"
+    if file_size_converted:
+        _str += _("file_size") + file_size_converted + "\n"
     if pages_amount:
         _str += _("pages_amount") + str(pages_amount) + "\n"
 
@@ -163,7 +171,26 @@ async def print_file(message: types.Message, bot: Bot, pages_numbers: str | None
                 file.name,
             )
             await process.wait()
+            await delete_file(message)
         except Exception as e:
             logger.error(e)
             return False
         return True
+
+
+async def convert_file_size(file_size: int) -> str:
+    if file_size:
+        if file_size < 700:
+            file_size = str(file_size) + " B"
+        elif file_size < 700 * 1024:
+            file_size = str(round(file_size / 1024, 2)) + " KB"
+        else:
+            file_size = str(round(file_size / 1024 / 1024, 2)) + " MB"
+    return file_size
+
+
+@router.callback_query(CancelPrintFileCallbackFactory.filter())
+async def handle_cancel_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
+    await callback.message.answer(_("print_canceled"))
+    await state.clear()
+    await callback.answer()

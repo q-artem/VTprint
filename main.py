@@ -23,11 +23,13 @@ from middlewares.i18n_db import I18nDatabaseMiddleware
 import handlers.printer
 import handlers.user
 import utils.admin_utils
+import handlers.unprocessed_updates
 
 DEBUG = True
 
 async def main():
     logging.basicConfig(level=logging.INFO)
+    logging.getLogger("pypdf").setLevel(logging.ERROR)  # ТИХОНЕЧКО
 
     API_TOKEN = config.bot_token.get_secret_value()
 
@@ -51,9 +53,10 @@ async def main():
 
 
     # роутеры
+    dp.include_router(utils.admin_utils.router)
     dp.include_router(handlers.user.router)
     dp.include_router(handlers.printer.router)
-    dp.include_router(utils.admin_utils.router)
+    dp.include_router(handlers.unprocessed_updates.router)
 
 
     await init_db()
