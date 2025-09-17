@@ -20,6 +20,9 @@ from aiogram.utils.i18n import gettext as _
 
 from middlewares.i18n_db import I18nDatabaseMiddleware
 
+from aiogram.fsm.storage.redis import RedisStorage
+from redis.asyncio import Redis
+
 import handlers.printer
 import handlers.user
 import utils.admin_utils
@@ -31,14 +34,14 @@ async def main():
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("pypdf").setLevel(logging.ERROR)  # ТИХОНЕЧКО
 
-    API_TOKEN = config.bot_token.get_secret_value()
+    storage = RedisStorage(Redis())
 
-    bot = Bot(token=API_TOKEN,
+    bot = Bot(token=config.bot_token.get_secret_value(),
               default=DefaultBotProperties(
                   parse_mode=ParseMode.HTML,
               ))
 
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
 
 
     # мидлвари

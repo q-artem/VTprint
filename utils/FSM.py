@@ -5,7 +5,7 @@ class GetPagesState(StatesGroup):
     getting_pages = State()
 
 class PrintStates(StatesGroup):
-    # waiting_for_file = State()      # Ожидание загрузки файла
+    # waiting_for_file = State()      # Ожидание загрузки файла   обходить когда кидают файл
     setting_parameters = State()    # Главное меню настройки параметров
     getting_pages = State()         # Ввод диапазона страниц
     setting_copies = State()        # Ввод количества копий
