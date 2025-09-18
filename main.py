@@ -1,7 +1,5 @@
 import asyncio
 import logging
-import tempfile
-from asyncio import create_subprocess_exec
 
 from aiogram.client.default import DefaultBotProperties
 
@@ -9,21 +7,18 @@ from database.setup_start_data import init_start_data
 from middlewares.block_nuregistreted import BlockUnregisteredMiddleware
 from utils.config_reader import config
 
-from aiogram import Bot, Dispatcher, F, types
-from aiogram.enums import ContentType, ParseMode
+from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
 
 from database.session import init_db, async_session_maker
 from middlewares.db import DatabaseSessionMiddleware
-from middlewares.i18n import i18n
-
-from aiogram.utils.i18n import gettext as _
 
 from middlewares.i18n_db import I18nDatabaseMiddleware
 
 from aiogram.fsm.storage.redis import RedisStorage
 from redis.asyncio import Redis
 
-import handlers.printer
+import states.printer
 import handlers.user
 import utils.admin_utils
 import handlers.unprocessed_updates
@@ -58,7 +53,7 @@ async def main():
     # роутеры
     dp.include_router(utils.admin_utils.router)
     dp.include_router(handlers.user.router)
-    dp.include_router(handlers.printer.router)
+    dp.include_router(states.printer.router)
     dp.include_router(handlers.unprocessed_updates.router)
 
 

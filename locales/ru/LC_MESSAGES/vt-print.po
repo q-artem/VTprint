@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-15 13:22+0300\n"
+"POT-Creation-Date: 2025-09-18 14:23+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,40 +19,108 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: handlers/printer.py:26
-msgid "file_is_not_pdf"
-msgstr "Поддерживаются только PDF-файлы"
-
-#: handlers/printer.py:30
-msgid "file_is_too_big_max_is_20mb"
-msgstr ""
-
-#: handlers/printer.py:35
-msgid "processing_file"
-msgstr ""
-
-#: handlers/printer.py:51 handlers/printer.py:59
-#, fuzzy
-msgid "file_info"
-msgstr "Поддерживаются только PDF-файлы"
-
-#: handlers/printer.py:60
-msgid "file_sent_to_print"
-msgstr "Файл отправлен на печать"
-
-#: handlers/printer.py:82
-msgid "page_range_selected"
-msgstr ""
-
-#: handlers/printer.py:88
-msgid "pages"
-msgstr ""
+#: handlers/unprocessed_updates.py:8 handlers/user.py:77
+msgid "to_start_work_send_pdf"
+msgstr "Для начала работы отправьте документ в формате PDF"
 
 #: handlers/user.py:76
 msgid "selected_language"
 msgstr "Выбран язык: {}"
 
-#: utils/keyboards.py:22
+#: states/printer.py:26
+msgid "file_is_not_pdf"
+msgstr "Поддерживаются только PDF-файлы"
+
+#: states/printer.py:30
+msgid "file_is_too_big_max_is_20mb"
+msgstr ""
+"Файл слишком большой, максимальный размер файла - 20 МБ. Сожмите файл, "
+"например <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">здесь<\\a>"
+
+#: states/printer.py:51
+msgid "file_sent_to_print"
+msgstr "Файл отправлен на печать"
+
+#: states/printer.py:60
+msgid "page_range_selecting_available_n_pages"
+msgstr ""
+"Введите диапазоны страниц, например: \n"
+"1-5,7,8-10\n"
+"Вам доступно {} страниц"
+
+#: states/printer.py:69
+msgid "pages_ranges_all_pages_from_n_available"
+msgstr "Диапазоны заданы: \"{}\". Страниц к печати {} из {} доступных"
+
+#: states/printer.py:80
+msgid "print_canceled"
+msgstr "Печать отменена"
+
+#: states/printer.py:83
+msgid "not_in_print_state"
+msgstr "Вы не в настройках печати"
+
+#: states/printer_utils.py:14
+msgid "too_much_length_of_range_of_pages"
+msgstr "Too long string (less than 100 symbols)"
+
+#: states/printer_utils.py:23 states/printer_utils.py:27
+#: states/printer_utils.py:32 states/printer_utils.py:36
+msgid "wrong_range_of_pages"
+msgstr ""
+
+#: states/printer_utils.py:67
+#, fuzzy
+msgid "file_name"
+msgstr "Поддерживаются только PDF-файлы"
+
+#: states/printer_utils.py:69
+#, fuzzy
+msgid "file_size"
+msgstr "Поддерживаются только PDF-файлы"
+
+#: states/printer_utils.py:71
+msgid "pages_amount"
+msgstr ""
+
+#: states/printer_utils.py:76
+msgid "pages_ranges"
+msgstr ""
+
+#: states/printer_utils.py:78
+#, fuzzy
+msgid "pages_to_print"
+msgstr "Файл отправлен на печать"
+
+#: states/printer_utils.py:82
+msgid "pages_available"
+msgstr ""
+
+#: states/printer_utils.py:83
+msgid "sure_to_print_or_change_params"
+msgstr ""
+
+#: utils/keyboards.py:23
 msgid "choice_page_range"
 msgstr ""
+
+#: utils/keyboards.py:25
+msgid "accept_print"
+msgstr ""
+
+#: utils/keyboards.py:29
+msgid "cancel_print"
+msgstr ""
+
+#~ msgid "processing_file"
+#~ msgstr ""
+
+#~ msgid "page_range_selected"
+#~ msgstr ""
+
+#~ msgid "pages"
+#~ msgstr ""
+
+#~ msgid "pages_ranges_all_pages"
+#~ msgstr ""
 
