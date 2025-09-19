@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-18 14:23+0300\n"
+"POT-Creation-Date: 2025-09-19 17:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,23 +21,27 @@ msgstr ""
 msgid "to_start_work_send_pdf"
 msgstr ""
 
+#: handlers/unprocessed_updates.py:12
+msgid "you_are_not_in_print_state"
+msgstr ""
+
 #: handlers/user.py:76
 msgid "selected_language"
 msgstr ""
 
-#: states/printer.py:26
+#: states/printer.py:27
 msgid "file_is_not_pdf"
 msgstr ""
 
-#: states/printer.py:30
+#: states/printer.py:31
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 
-#: states/printer.py:51
+#: states/printer.py:52
 msgid "file_sent_to_print"
 msgstr ""
 
-#: states/printer.py:60
+#: states/printer.py:61
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 
@@ -57,36 +61,35 @@ msgstr ""
 msgid "too_much_length_of_range_of_pages"
 msgstr ""
 
-#: states/printer_utils.py:23 states/printer_utils.py:27
-#: states/printer_utils.py:32 states/printer_utils.py:36
+#: states/printer_utils.py:19 states/printer_utils.py:39
 msgid "wrong_range_of_pages"
 msgstr ""
 
-#: states/printer_utils.py:67
+#: states/printer_utils.py:69
 msgid "file_name"
 msgstr ""
 
-#: states/printer_utils.py:69
+#: states/printer_utils.py:71
 msgid "file_size"
 msgstr ""
 
-#: states/printer_utils.py:71
+#: states/printer_utils.py:73
 msgid "pages_amount"
 msgstr ""
 
-#: states/printer_utils.py:76
+#: states/printer_utils.py:78
 msgid "pages_ranges"
 msgstr ""
 
-#: states/printer_utils.py:78
+#: states/printer_utils.py:80
 msgid "pages_to_print"
 msgstr ""
 
-#: states/printer_utils.py:82
+#: states/printer_utils.py:84
 msgid "pages_available"
 msgstr ""
 
-#: states/printer_utils.py:83
+#: states/printer_utils.py:85
 msgid "sure_to_print_or_change_params"
 msgstr ""
 

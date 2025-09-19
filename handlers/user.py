@@ -74,5 +74,5 @@ async def set_lang(callback: CallbackQuery, session: AsyncSession, _):
         await session.commit()
 
     await callback.message.answer(_("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
-    await callback.message.answer(_("to_start_work_send_pdf"))
+    await callback.message.answer(_("to_start_work_send_pdf", lang_code))
     await callback.answer()

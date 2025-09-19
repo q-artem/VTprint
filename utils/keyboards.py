@@ -27,5 +27,5 @@ def get_print_file_menu_keyboard(_, pages_total, message_with_file_id, pages_ran
                                                                 message_with_file_id=message_with_file_id,
                                                                 pages_ranges=pages_ranges))
     builder.button(text=_("cancel_print"), callback_data=CancelPrintFileCallbackFactory())
-    builder.adjust(2)
+    builder.adjust(1)
     return builder.as_markup()

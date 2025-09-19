@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-18 14:23+0300\n"
+"POT-Creation-Date: 2025-09-19 17:07+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -23,25 +23,31 @@ msgstr ""
 msgid "to_start_work_send_pdf"
 msgstr "Для начала работы отправьте документ в формате PDF"
 
+#: handlers/unprocessed_updates.py:12
+msgid "you_are_not_in_print_state"
+msgstr "Вы не в настройках печати"
+
 #: handlers/user.py:76
 msgid "selected_language"
 msgstr "Выбран язык: {}"
 
-#: states/printer.py:26
+#: states/printer.py:27
 msgid "file_is_not_pdf"
 msgstr "Поддерживаются только PDF-файлы"
 
-#: states/printer.py:30
+#: states/printer.py:31
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 "Файл слишком большой, максимальный размер файла - 20 МБ. Сожмите файл, "
-"например <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">здесь<\\a>"
+"например <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">здесь</a>"
 
-#: states/printer.py:51
+#: states/printer.py:52
 msgid "file_sent_to_print"
-msgstr "Файл успешно отправлен на печать 🎉\nОстаток страниц: {}"
+msgstr ""
+"Файл успешно отправлен на печать 🎉\n"
+"Остаток страниц: {}"
 
-#: states/printer.py:60
+#: states/printer.py:61
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Введите диапазоны страниц, например: \n"
@@ -64,36 +70,35 @@ msgstr "Вы не в настройках печати"
 msgid "too_much_length_of_range_of_pages"
 msgstr "Слишком сложно, давайте покороче (до 100 символов)"
 
-#: states/printer_utils.py:23 states/printer_utils.py:27
-#: states/printer_utils.py:32 states/printer_utils.py:36
+#: states/printer_utils.py:19 states/printer_utils.py:39
 msgid "wrong_range_of_pages"
 msgstr "Неверный диапазон страниц, попробуйте еще раз"
 
-#: states/printer_utils.py:67
+#: states/printer_utils.py:69
 msgid "file_name"
 msgstr "Имя файла: <u>{}</u>"
 
-#: states/printer_utils.py:69
+#: states/printer_utils.py:71
 msgid "file_size"
 msgstr "Размер файла: <u>{}</u>"
 
-#: states/printer_utils.py:71
+#: states/printer_utils.py:73
 msgid "pages_amount"
 msgstr "Количество страниц: <u>{}</u>"
 
-#: states/printer_utils.py:76
-msgid "pages_ranges"
-msgstr "<b>Выбранные диапазоны страниц:<\d> <u>{}</u>"
-
 #: states/printer_utils.py:78
+msgid "pages_ranges"
+msgstr "<b>Выбранные диапазоны страниц:<\\d> <u>{}</u>"
+
+#: states/printer_utils.py:80
 msgid "pages_to_print"
 msgstr "Страниц к печати: <u>{}</u>"
 
-#: states/printer_utils.py:82
+#: states/printer_utils.py:84
 msgid "pages_available"
 msgstr "Доступно страниц: <u>{}</u>. Остаток после печати: <u>{}</u>"
 
-#: states/printer_utils.py:83
+#: states/printer_utils.py:85
 msgid "sure_to_print_or_change_params"
 msgstr "<i>Подтвердите печать или измените параметры</i>"
 

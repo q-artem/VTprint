@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-18 14:23+0300\n"
+"POT-Creation-Date: 2025-09-19 17:07+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -22,25 +22,32 @@ msgstr ""
 msgid "to_start_work_send_pdf"
 msgstr "Send a PDF file to start"
 
+#: handlers/unprocessed_updates.py:12
+msgid "you_are_not_in_print_state"
+msgstr "You not in print settings"
+
 #: handlers/user.py:76
 msgid "selected_language"
 msgstr "Selected language: {}"
 
-#: states/printer.py:26
+#: states/printer.py:27
 msgid "file_is_not_pdf"
 msgstr "Only PDF format is supported"
 
-#: states/printer.py:30
+#: states/printer.py:31
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
-"The file is too big. Max size is 20MB. Try compressing it, you can do it"
-" <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">here<\\a>"
+"The file is too big. Max size is 20MB. \n"
+"Try compressing it, you can do it <a "
+"href=\"https://www.ilovepdf.com/ru/compress_pdf\">here</a>"
 
-#: states/printer.py:51
+#: states/printer.py:52
 msgid "file_sent_to_print"
-msgstr "File has been successfully sent to printer 🎉\nRemaining pages: {}"
+msgstr ""
+"File has been successfully sent to printer 🎉\n"
+"Remaining pages: {}"
 
-#: states/printer.py:60
+#: states/printer.py:61
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Please type ranges of pages. For example: \n"
@@ -63,36 +70,35 @@ msgstr "You not in print settings"
 msgid "too_much_length_of_range_of_pages"
 msgstr "Too long string (less than 100 symbols)"
 
-#: states/printer_utils.py:23 states/printer_utils.py:27
-#: states/printer_utils.py:32 states/printer_utils.py:36
+#: states/printer_utils.py:19 states/printer_utils.py:39
 msgid "wrong_range_of_pages"
 msgstr "Invalid pages range"
 
-#: states/printer_utils.py:67
+#: states/printer_utils.py:69
 msgid "file_name"
 msgstr "File name: <u>{}</u>"
 
-#: states/printer_utils.py:69
+#: states/printer_utils.py:71
 msgid "file_size"
 msgstr "File size: <u>{}</u>"
 
-#: states/printer_utils.py:71
+#: states/printer_utils.py:73
 msgid "pages_amount"
 msgstr "Pages amount: <u>{}</u>"
 
-#: states/printer_utils.py:76
-msgid "pages_ranges"
-msgstr "<b>Selected pages ranges:<\b> <u>{}</u>"
-
 #: states/printer_utils.py:78
+msgid "pages_ranges"
+msgstr "<b>Selected pages ranges:<\\b> <u>{}</u>"
+
+#: states/printer_utils.py:80
 msgid "pages_to_print"
 msgstr "Pages to print: <u>{}</u>"
 
-#: states/printer_utils.py:82
+#: states/printer_utils.py:84
 msgid "pages_available"
 msgstr "Pages available: <u>{}</u>. Reminds after print: <u>{}</u>"
 
-#: states/printer_utils.py:83
+#: states/printer_utils.py:85
 msgid "sure_to_print_or_change_params"
 msgstr "<i>Confirm print or change parameters</i>"
 
