@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-19 23:23+0300\n"
+"POT-Creation-Date: 2025-09-20 00:33+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -31,11 +31,11 @@ msgstr "You not in print settings"
 msgid "selected_language"
 msgstr "Selected language: {}"
 
-#: states/printer.py:27
+#: states/printer.py:28
 msgid "file_is_not_pdf"
 msgstr "Only PDF format is supported"
 
-#: states/printer.py:31
+#: states/printer.py:32
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 "The file is too big. Max size is 20MB. \n"
@@ -47,71 +47,82 @@ msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Please type ranges of pages. For example: \n"
 "1-5,7,8-10\n"
-"You available {} pages"
+"Pages in file: {}. Pages available: {}"
 
-#: states/printer.py:81
+#: states/printer.py:83
 msgid "too_many_pages_you_available_n"
-msgstr "Too many pages, you available {}. New pages will be available tomorrow"
+msgstr ""
+"Too many pages, you available {}. New pages will be available tomorrow. "
+"Try again"
 
-#: states/printer.py:84
+#: states/printer.py:86
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Ranges accepted: \"{}\". Pages to print: {} from {} available"
 
-#: states/printer.py:95
+#: states/printer.py:98
+msgid "canceled"
+msgstr "Action canceled"
+
+#: states/printer.py:113
 msgid "print_canceled"
 msgstr "Print canceled"
 
-#: states/printer.py:98
+#: states/printer.py:116
 msgid "not_in_print_state"
 msgstr "You not in print settings"
 
-#: states/printer_utils.py:14
+#: states/printer_utils.py:16
 msgid "too_much_length_of_range_of_pages"
 msgstr "Too long string (less than 100 symbols)"
 
-#: states/printer_utils.py:19 states/printer_utils.py:39
+#: states/printer_utils.py:21 states/printer_utils.py:41
+#: states/printer_utils.py:44
 msgid "wrong_range_of_pages"
 msgstr "Invalid pages range"
 
-#: states/printer_utils.py:72
+#: states/printer_utils.py:77
 msgid "file_name"
 msgstr "File name: <u>{}</u>"
 
-#: states/printer_utils.py:74
+#: states/printer_utils.py:79
 msgid "file_size"
 msgstr "File size: <u>{}</u>"
 
-#: states/printer_utils.py:76
+#: states/printer_utils.py:81
 msgid "pages_amount"
 msgstr "Pages amount: <u>{}</u>"
 
-#: states/printer_utils.py:81
+#: states/printer_utils.py:86
 msgid "pages_ranges"
-msgstr "<b>Selected pages ranges:<\\b> <u>{}</u>"
+msgstr "<b>Selected pages ranges:</d> <u>{}</u>"
 
-#: states/printer_utils.py:83
+#: states/printer_utils.py:88
 msgid "pages_to_print"
 msgstr "Pages to print: <u>{}</u>"
 
-#: states/printer_utils.py:87
+#: states/printer_utils.py:92
 msgid "pages_available"
 msgstr "Pages available: <u>{}</u>. Reminds after print: <u>{}</u>"
 
-#: states/printer_utils.py:88
+#: states/printer_utils.py:93
 msgid "sure_to_print_or_change_params"
 msgstr "<i>Confirm print or change parameters</i>"
 
-#: utils/keyboards.py:23
+#: utils/keyboards.py:26
 msgid "choice_page_range"
 msgstr "Set pages range"
 
-#: utils/keyboards.py:25
+#: utils/keyboards.py:28
 msgid "accept_print"
 msgstr "Confirm print"
 
-#: utils/keyboards.py:29
+#: utils/keyboards.py:30
 msgid "cancel_print"
 msgstr "Cancel print"
+
+#: utils/keyboards.py:36
+msgid "cancel"
+msgstr "Cancel"
 
 #~ msgid "processing_file"
 #~ msgstr ""

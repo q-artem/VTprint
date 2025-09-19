@@ -4,6 +4,9 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from utils.callback_factory import ChoicePageRangeCallbackFactory, AcceptPrintFileCallbackFactory, \
     CancelPrintFileCallbackFactory
 
+from aiogram.filters.callback_data import CallbackData
+
+
 
 def get_lang_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -18,14 +21,17 @@ def get_admin_panel_keyboard():
     ])
 
 
-def get_print_file_menu_keyboard(_, pages_total, message_with_file_id, pages_ranges: str = ""):
+def get_print_file_menu_keyboard(_):
     builder = InlineKeyboardBuilder()
     builder.button(text=_("choice_page_range"),
                    callback_data=ChoicePageRangeCallbackFactory())
     builder.button(text=_("accept_print"),
-                   callback_data=AcceptPrintFileCallbackFactory(pages_total=pages_total,
-                                                                message_with_file_id=message_with_file_id,
-                                                                pages_ranges=pages_ranges))
+                   callback_data=AcceptPrintFileCallbackFactory())
     builder.button(text=_("cancel_print"), callback_data=CancelPrintFileCallbackFactory())
     builder.adjust(1)
+    return builder.as_markup()
+
+def get_cancel_keyboard(_, callback_factory: CallbackData):
+    builder = InlineKeyboardBuilder()
+    builder.button(text=_("cancel"), callback_data=callback_factory)
     return builder.as_markup()

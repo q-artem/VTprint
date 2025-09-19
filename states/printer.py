@@ -10,9 +10,10 @@ from database.models import User
 from states.printer_utils import validate_pages_ranges, count_pages, build_file_info_message, convert_file_size
 from utils.FSM import GetPagesState, PrintStates
 from utils.FSM_data_classes import PrintData
-from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory
+from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory, \
+    CanselEnterPagesRangesCallbackFactory
 from utils.files_utils import get_file
-from utils.keyboards import get_print_file_menu_keyboard
+from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard
 
 from utils.FSM_utils import set_user_data, get_user_data
 
@@ -46,8 +47,7 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 
     file_info = await build_file_info_message(_, state, session, message.from_user.id)
 
-    info_message = await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_total,
-                                                                              message.message_id))
+    info_message = await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_))
 
     async with get_user_data(state, PrintData) as user_data:
         user_data.info_message_id = info_message.message_id
@@ -61,34 +61,54 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 
 
 @router.callback_query(StateFilter(PrintStates.setting_parameters), ChoicePageRangeCallbackFactory.filter())
-async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
+async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
         await bot.edit_message_text(
             chat_id=user_data.chat_id,
             message_id=user_data.info_message_id,
-            text=_("page_range_selecting_available_n_pages").format(user_data.pages_total)
+            text=_("page_range_selecting_available_n_pages").format(user_data.pages_total, (await session.get(User, callback.from_user.id)).pages_left),
+            reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory())
         )
     await state.set_state(PrintStates.getting_pages)
     await callback.answer()
 
 @router.message(PrintStates.getting_pages)
 async def handle_get_pages(message: types.Message, session: AsyncSession, state: FSMContext, _):
-    if not await validate_pages_ranges(message, _):
-        return
+    async with get_user_data(state, PrintData) as user_data:
+        if not await validate_pages_ranges(_, message, user_data.pages_total):
+            return
     pages_amount = await count_pages(message.text)
     pages_left = (await session.get(User, message.from_user.id)).pages_left
     if pages_amount > pages_left:
-        await message.answer(_("too_many_pages_you_available_n").format(pages_amount))
+        await message.answer(_("too_many_pages_you_available_n").format(pages_amount), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return
 
-    await message.answer(_("pages_ranges_all_pages_from_n_available").format(str(message.text), pages_amount, pages_left))
+    async with get_user_data(state, PrintData) as user_data:
+        user_data.pages_to_print = pages_amount
+        user_data.pages_ranges = message.text
+
+    pref_info = _("pages_ranges_all_pages_from_n_available").format(message.text, pages_amount, pages_left)
+    info_mess = await build_file_info_message(_, state, session, message.from_user.id, pref_info)
+    info_message = await message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
+    async with get_user_data(state, PrintData) as user_data:
+        user_data.info_message_id = info_message.message_id
     await state.set_state(PrintStates.setting_parameters)
 
-# будет израсходовано 3 ил 5 доступных
+
+@router.callback_query(PrintStates.getting_pages, CanselEnterPagesRangesCallbackFactory.filter())
+async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    await callback.message.answer(_("canceled"))
+    info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
+    info_message = await callback.message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
+    async with get_user_data(state, PrintData) as user_data:
+        user_data.info_message_id = info_message.message_id
+    await state.set_state(PrintStates.setting_parameters)
+    await callback.answer()
+
 ############################################################
 
 
-@router.callback_query(CancelPrintFileCallbackFactory.filter())
+@router.callback_query(PrintStates.setting_parameters, CancelPrintFileCallbackFactory.filter())
 async def handle_cancel_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
 
     if StateFilter(GetPagesState):

@@ -7,16 +7,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import User
 from utils.FSM_data_classes import PrintData
 from utils.FSM_utils import get_user_data
+from utils.callback_factory import CancelPrintFileCallbackFactory, CanselEnterPagesRangesCallbackFactory
+from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard
 
 
-async def validate_pages_ranges(message: types.Message, _) -> bool:
+async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> bool:
     if len(message.text) > 100:
-        await message.answer(_("too_much_length_of_range_of_pages"))
+        await message.answer(_("too_much_length_of_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return False
     pages = message.text.split(",")
     last_number = 0
     if set(message.text) - set("0123456789,-"):
-        await message.answer(_("wrong_range_of_pages"))
+        await message.answer(_("wrong_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return False
     for q in pages:
         if "-" in q:
@@ -35,8 +37,11 @@ async def validate_pages_ranges(message: types.Message, _) -> bool:
             except Exception as e:
                 break
     else:
+        if last_number > pages_total:
+            await message.answer(_("wrong_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
+            return False
         return True
-    await message.answer(_("wrong_range_of_pages"))
+    await message.answer(_("wrong_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
     return False
 
 

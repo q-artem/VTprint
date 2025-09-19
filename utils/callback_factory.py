@@ -6,8 +6,10 @@ class ChoicePageRangeCallbackFactory(CallbackData, prefix="choice_page_range"):
     # Optional[int] = None
 
 class AcceptPrintFileCallbackFactory(CallbackData, prefix="accept_print_file"):
-    message_with_file_id: int
-    pages_ranges: str
+    pass
 
 class CancelPrintFileCallbackFactory(CallbackData, prefix="cancel_print_file"):
+    pass
+
+class CanselEnterPagesRangesCallbackFactory(CallbackData, prefix="cancel_enter_pages_ranges"):
     pass
