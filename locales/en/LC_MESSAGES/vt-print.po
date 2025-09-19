@@ -20,7 +20,7 @@ msgstr ""
 
 #: handlers/unprocessed_updates.py:8 handlers/user.py:77
 msgid "to_start_work_send_pdf"
-msgstr "To start work send PDF file"
+msgstr "Send a PDF file to start"
 
 #: handlers/user.py:76
 msgid "selected_language"
@@ -33,12 +33,12 @@ msgstr "Only PDF format is supported"
 #: states/printer.py:30
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
-"Sent file is too big. Max size is 20MB. Please compress file, for example"
+"The file is too big. Max size is 20MB. Try compressing it, you can do it"
 " <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">here<\\a>"
 
 #: states/printer.py:51
 msgid "file_sent_to_print"
-msgstr "File has been sent to printer"
+msgstr "File has been successfully sent to printer 🎉\nRemaining pages: {}"
 
 #: states/printer.py:60
 msgid "page_range_selecting_available_n_pages"
@@ -61,55 +61,52 @@ msgstr "You not in print settings"
 
 #: states/printer_utils.py:14
 msgid "too_much_length_of_range_of_pages"
-msgstr "Слишком сложно, давайте покороче (до 100 символов)"
+msgstr "Too long string (less than 100 symbols)"
 
 #: states/printer_utils.py:23 states/printer_utils.py:27
 #: states/printer_utils.py:32 states/printer_utils.py:36
 msgid "wrong_range_of_pages"
-msgstr ""
+msgstr "Invalid pages range"
 
 #: states/printer_utils.py:67
-#, fuzzy
 msgid "file_name"
-msgstr "Only PDF format is supported"
+msgstr "File name: <u>{}</u>"
 
 #: states/printer_utils.py:69
-#, fuzzy
 msgid "file_size"
-msgstr "Only PDF format is supported"
+msgstr "File size: <u>{}</u>"
 
 #: states/printer_utils.py:71
 msgid "pages_amount"
-msgstr ""
+msgstr "Pages amount: <u>{}</u>"
 
 #: states/printer_utils.py:76
 msgid "pages_ranges"
-msgstr ""
+msgstr "<b>Selected pages ranges:<\b> <u>{}</u>"
 
 #: states/printer_utils.py:78
-#, fuzzy
 msgid "pages_to_print"
-msgstr "File has been sent to printer"
+msgstr "Pages to print: <u>{}</u>"
 
 #: states/printer_utils.py:82
 msgid "pages_available"
-msgstr ""
+msgstr "Pages available: <u>{}</u>. Reminds after print: <u>{}</u>"
 
 #: states/printer_utils.py:83
 msgid "sure_to_print_or_change_params"
-msgstr ""
+msgstr "<i>Confirm print or change parameters</i>"
 
 #: utils/keyboards.py:23
 msgid "choice_page_range"
-msgstr ""
+msgstr "Set pages range"
 
 #: utils/keyboards.py:25
 msgid "accept_print"
-msgstr ""
+msgstr "Confirm print"
 
 #: utils/keyboards.py:29
 msgid "cancel_print"
-msgstr ""
+msgstr "Cancel print"
 
 #~ msgid "processing_file"
 #~ msgstr ""

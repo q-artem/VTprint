@@ -39,7 +39,7 @@ msgstr ""
 
 #: states/printer.py:51
 msgid "file_sent_to_print"
-msgstr "Файл отправлен на печать"
+msgstr "Файл успешно отправлен на печать 🎉\nОстаток страниц: {}"
 
 #: states/printer.py:60
 msgid "page_range_selecting_available_n_pages"
@@ -62,55 +62,52 @@ msgstr "Вы не в настройках печати"
 
 #: states/printer_utils.py:14
 msgid "too_much_length_of_range_of_pages"
-msgstr "Too long string (less than 100 symbols)"
+msgstr "Слишком сложно, давайте покороче (до 100 символов)"
 
 #: states/printer_utils.py:23 states/printer_utils.py:27
 #: states/printer_utils.py:32 states/printer_utils.py:36
 msgid "wrong_range_of_pages"
-msgstr ""
+msgstr "Неверный диапазон страниц, попробуйте еще раз"
 
 #: states/printer_utils.py:67
-#, fuzzy
 msgid "file_name"
-msgstr "Поддерживаются только PDF-файлы"
+msgstr "Имя файла: <u>{}</u>"
 
 #: states/printer_utils.py:69
-#, fuzzy
 msgid "file_size"
-msgstr "Поддерживаются только PDF-файлы"
+msgstr "Размер файла: <u>{}</u>"
 
 #: states/printer_utils.py:71
 msgid "pages_amount"
-msgstr ""
+msgstr "Количество страниц: <u>{}</u>"
 
 #: states/printer_utils.py:76
 msgid "pages_ranges"
-msgstr ""
+msgstr "<b>Выбранные диапазоны страниц:<\d> <u>{}</u>"
 
 #: states/printer_utils.py:78
-#, fuzzy
 msgid "pages_to_print"
-msgstr "Файл отправлен на печать"
+msgstr "Страниц к печати: <u>{}</u>"
 
 #: states/printer_utils.py:82
 msgid "pages_available"
-msgstr ""
+msgstr "Доступно страниц: <u>{}</u>. Остаток после печати: <u>{}</u>"
 
 #: states/printer_utils.py:83
 msgid "sure_to_print_or_change_params"
-msgstr ""
+msgstr "<i>Подтвердите печать или измените параметры</i>"
 
 #: utils/keyboards.py:23
 msgid "choice_page_range"
-msgstr ""
+msgstr "Выбрать диапазон страниц"
 
 #: utils/keyboards.py:25
 msgid "accept_print"
-msgstr ""
+msgstr "Подтвердить печать"
 
 #: utils/keyboards.py:29
 msgid "cancel_print"
-msgstr ""
+msgstr "Отменить печать"
 
 #~ msgid "processing_file"
 #~ msgstr ""

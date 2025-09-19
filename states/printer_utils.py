@@ -66,22 +66,22 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
         _str = ""
         if file_name:
-            _str += _("file_name") + html.escape(file_name) + "\n"
+            _str += _("file_name").format(html.escape(file_name)) + "\n"
         if file_size_converted:
-            _str += _("file_size") + file_size_converted + "\n"
+            _str += _("file_size").format(file_size_converted) + "\n"
         if pages_total:
-            _str += _("pages_amount") + str(pages_total) + "\n"
+            _str += _("pages_amount").format(str(pages_total)) + "\n"
 
         _str += "\n"
         if pages_ranges:
             print(pages_ranges)
-            _str += _("pages_ranges") + pages_ranges + "\n"
+            _str += _("pages_ranges").format(pages_ranges) + "\n"
         if pages_to_print:
-            _str += _("pages_to_print") + str(pages_to_print) + "\n"
+            _str += _("pages_to_print").format(str(pages_to_print)) + "\n"
 
         _str += "\n"
         if pages_available:
-            _str += "<b>" + _("pages_available") + str(pages_available) + "</b>" + "\n"
+            _str += "<b>" + _("pages_available").format(str(pages_available), str(pages_available - pages_to_print)) + "</b>" + "\n"
         _str += _("sure_to_print_or_change_params")
 
         return _str
