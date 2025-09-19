@@ -76,9 +76,12 @@ async def handle_get_pages(message: types.Message, session: AsyncSession, state:
     if not await validate_pages_ranges(message, _):
         return
     pages_amount = await count_pages(message.text)
+    pages_left = (await session.get(User, message.from_user.id)).pages_left
+    if pages_amount > pages_left:
+        await message.answer(_("too_many_pages_you_available_n").format(pages_amount))
+        return
 
-
-    await message.answer(_("pages_ranges_all_pages_from_n_available").format(str(message.text), pages_amount, (await session.get(User, message.from_user.id)).pages_left))
+    await message.answer(_("pages_ranges_all_pages_from_n_available").format(str(message.text), pages_amount, pages_left))
     await state.set_state(PrintStates.setting_parameters)
 
 # будет израсходовано 3 ил 5 доступных

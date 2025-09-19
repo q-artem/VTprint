@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-19 17:07+0300\n"
+"POT-Creation-Date: 2025-09-19 23:23+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: handlers/unprocessed_updates.py:8 handlers/user.py:77
+#: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
+#: handlers/user.py:77
 msgid "to_start_work_send_pdf"
 msgstr ""
 
@@ -37,23 +38,23 @@ msgstr ""
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 
-#: states/printer.py:52
-msgid "file_sent_to_print"
-msgstr ""
-
-#: states/printer.py:61
+#: states/printer.py:69
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 
-#: states/printer.py:69
+#: states/printer.py:81
+msgid "too_many_pages_you_available_n"
+msgstr ""
+
+#: states/printer.py:84
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:80
+#: states/printer.py:95
 msgid "print_canceled"
 msgstr ""
 
-#: states/printer.py:83
+#: states/printer.py:98
 msgid "not_in_print_state"
 msgstr ""
 
@@ -65,31 +66,31 @@ msgstr ""
 msgid "wrong_range_of_pages"
 msgstr ""
 
-#: states/printer_utils.py:69
+#: states/printer_utils.py:72
 msgid "file_name"
 msgstr ""
 
-#: states/printer_utils.py:71
+#: states/printer_utils.py:74
 msgid "file_size"
 msgstr ""
 
-#: states/printer_utils.py:73
+#: states/printer_utils.py:76
 msgid "pages_amount"
 msgstr ""
 
-#: states/printer_utils.py:78
+#: states/printer_utils.py:81
 msgid "pages_ranges"
 msgstr ""
 
-#: states/printer_utils.py:80
+#: states/printer_utils.py:83
 msgid "pages_to_print"
 msgstr ""
 
-#: states/printer_utils.py:84
+#: states/printer_utils.py:87
 msgid "pages_available"
 msgstr ""
 
-#: states/printer_utils.py:85
+#: states/printer_utils.py:88
 msgid "sure_to_print_or_change_params"
 msgstr ""
 

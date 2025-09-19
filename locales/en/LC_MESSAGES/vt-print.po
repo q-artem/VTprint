@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-19 17:07+0300\n"
+"POT-Creation-Date: 2025-09-19 23:23+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: handlers/unprocessed_updates.py:8 handlers/user.py:77
+#: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
+#: handlers/user.py:77
 msgid "to_start_work_send_pdf"
 msgstr "Send a PDF file to start"
 
@@ -41,28 +42,26 @@ msgstr ""
 "Try compressing it, you can do it <a "
 "href=\"https://www.ilovepdf.com/ru/compress_pdf\">here</a>"
 
-#: states/printer.py:52
-msgid "file_sent_to_print"
-msgstr ""
-"File has been successfully sent to printer 🎉\n"
-"Remaining pages: {}"
-
-#: states/printer.py:61
+#: states/printer.py:69
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Please type ranges of pages. For example: \n"
 "1-5,7,8-10\n"
 "You available {} pages"
 
-#: states/printer.py:69
+#: states/printer.py:81
+msgid "too_many_pages_you_available_n"
+msgstr "Too many pages, you available {}. New pages will be available tomorrow"
+
+#: states/printer.py:84
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Ranges accepted: \"{}\". Pages to print: {} from {} available"
 
-#: states/printer.py:80
+#: states/printer.py:95
 msgid "print_canceled"
 msgstr "Print canceled"
 
-#: states/printer.py:83
+#: states/printer.py:98
 msgid "not_in_print_state"
 msgstr "You not in print settings"
 
@@ -74,31 +73,31 @@ msgstr "Too long string (less than 100 symbols)"
 msgid "wrong_range_of_pages"
 msgstr "Invalid pages range"
 
-#: states/printer_utils.py:69
+#: states/printer_utils.py:72
 msgid "file_name"
 msgstr "File name: <u>{}</u>"
 
-#: states/printer_utils.py:71
+#: states/printer_utils.py:74
 msgid "file_size"
 msgstr "File size: <u>{}</u>"
 
-#: states/printer_utils.py:73
+#: states/printer_utils.py:76
 msgid "pages_amount"
 msgstr "Pages amount: <u>{}</u>"
 
-#: states/printer_utils.py:78
+#: states/printer_utils.py:81
 msgid "pages_ranges"
 msgstr "<b>Selected pages ranges:<\\b> <u>{}</u>"
 
-#: states/printer_utils.py:80
+#: states/printer_utils.py:83
 msgid "pages_to_print"
 msgstr "Pages to print: <u>{}</u>"
 
-#: states/printer_utils.py:84
+#: states/printer_utils.py:87
 msgid "pages_available"
 msgstr "Pages available: <u>{}</u>. Reminds after print: <u>{}</u>"
 
-#: states/printer_utils.py:85
+#: states/printer_utils.py:88
 msgid "sure_to_print_or_change_params"
 msgstr "<i>Confirm print or change parameters</i>"
 
@@ -122,4 +121,7 @@ msgstr "Cancel print"
 
 #~ msgid "pages"
 #~ msgstr ""
+
+#~ msgid "file_sent_to_print"
+#~ msgstr "Pages to print: <u>{}</u>"
 
