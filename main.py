@@ -7,7 +7,7 @@ from database.setup_start_data import init_start_data
 from middlewares.block_nuregistreted import BlockUnregisteredMiddleware
 from utils.config_reader import config
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 
 from database.session import init_db, async_session_maker
@@ -55,6 +55,11 @@ async def main():
     dp.include_router(handlers.user.router)
     dp.include_router(states.printer.router)
     dp.include_router(handlers.unprocessed_updates.router)
+
+    if DEBUG:  # удаление состояний
+        keys = await storage.redis.keys('fsm:*')
+        if keys:
+            await storage.redis.delete(*keys)
 
 
     await init_db()

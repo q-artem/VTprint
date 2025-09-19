@@ -123,6 +123,3 @@ msgstr "Отменить печать"
 #~ msgid "pages"
 #~ msgstr ""
 
-#~ msgid "pages_ranges_all_pages"
-#~ msgstr ""
-

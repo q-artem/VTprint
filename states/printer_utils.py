@@ -52,7 +52,7 @@ async def count_pages(pages_ranges: str) -> int:
     return count
 
 
-async def build_file_info_message(_, state: FSMContext, session: AsyncSession, user_id: int) -> str:
+async def build_file_info_message(_, state: FSMContext, session: AsyncSession, user_id: int, prefix: str | None = None) -> str:
     async with get_user_data(state, PrintData) as user_data:
         file_id = user_data.file_id
         file_name = user_data.file_name
@@ -65,6 +65,9 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
         pages_available = (await session.get(User, user_id)).pages_left
 
         _str = ""
+        if prefix:
+            _str += prefix + "\n\n"
+
         if file_name:
             _str += _("file_name").format(html.escape(file_name)) + "\n"
         if file_size_converted:

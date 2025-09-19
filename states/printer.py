@@ -14,7 +14,7 @@ from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFi
 from utils.files_utils import get_file
 from utils.keyboards import get_print_file_menu_keyboard
 
-from utils.FSM_utils import set_user_data
+from utils.FSM_utils import set_user_data, get_user_data
 
 router = Router()
 
@@ -36,7 +36,7 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
     pages_total = len(PdfReader(file).pages)
 
     await set_user_data(state, PrintData(
-        message_id=message.id,
+        chat_id=message.chat.id,
         file_id=message.document.file_id,
         file_name=message.document.file_name,
         file_size_converted=await convert_file_size(message.document.file_size),
@@ -46,8 +46,11 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 
     file_info = await build_file_info_message(_, state, session, message.from_user.id)
 
-    await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_total,
+    info_message = await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_, pages_total,
                                                                               message.message_id))
+
+    async with get_user_data(state, PrintData) as user_data:
+        user_data.info_message_id = info_message.message_id
 
     # await message.reply(_("file_sent_to_print"))
     await state.set_state(PrintStates.setting_parameters)
@@ -59,8 +62,12 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 
 @router.callback_query(StateFilter(PrintStates.setting_parameters), ChoicePageRangeCallbackFactory.filter())
 async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
-    await bot.edit_message_text(_("page_range_selecting_available_n_pages").format((await state.get_data())["pages_total"]))
-    # await callback.message.answer(_("page_range_selecting_available_n_pages").format((await state.get_data())["pages_total"]))
+    async with get_user_data(state, PrintData) as user_data:
+        await bot.edit_message_text(
+            chat_id=user_data.chat_id,
+            message_id=user_data.info_message_id,
+            text=_("page_range_selecting_available_n_pages").format(user_data.pages_total)
+        )
     await state.set_state(PrintStates.getting_pages)
     await callback.answer()
 
@@ -68,7 +75,10 @@ async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, stat
 async def handle_get_pages(message: types.Message, session: AsyncSession, state: FSMContext, _):
     if not await validate_pages_ranges(message, _):
         return
-    await message.answer(_("pages_ranges_all_pages_from_n_available").format(str(message.text), await count_pages(message.text), (await session.get(User, message.from_user.id)).pages_left))
+    pages_amount = await count_pages(message.text)
+
+
+    await message.answer(_("pages_ranges_all_pages_from_n_available").format(str(message.text), pages_amount, (await session.get(User, message.from_user.id)).pages_left))
     await state.set_state(PrintStates.setting_parameters)
 
 # будет израсходовано 3 ил 5 доступных
