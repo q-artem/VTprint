@@ -128,7 +128,7 @@ async def confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: 
         await bot.edit_message_text(
             chat_id=user_data.chat_id,
             message_id=user_data.info_message_id,
-            text=_("file_sent_to_print")
+            text=_("file_sent_to_print").format((await session.get(User, callback.from_user.id)).pages_left - user_data.pages_to_print),
         )
 
     await state.clear()

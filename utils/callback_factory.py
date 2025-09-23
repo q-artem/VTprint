@@ -11,5 +11,5 @@ class CancelPrintFileCallbackFactory(CallbackData, prefix="cancel_print_file"):
 class CanselEnterPagesRangesCallbackFactory(CallbackData, prefix="cancel_enter_pages_ranges"):
     pass
 
-class ConfirmPrintFileCallbackFactory(CallbackData, prefix="cancel_print_file"):
+class ConfirmPrintFileCallbackFactory(CallbackData, prefix="confirm_print_file"):
     pass
