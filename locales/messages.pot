@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-20 00:33+0300\n"
+"POT-Creation-Date: 2025-09-23 08:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,11 +30,11 @@ msgstr ""
 msgid "selected_language"
 msgstr ""
 
-#: states/printer.py:28
+#: states/printer.py:29
 msgid "file_is_not_pdf"
 msgstr ""
 
-#: states/printer.py:32
+#: states/printer.py:33
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 
@@ -46,19 +46,27 @@ msgstr ""
 msgid "too_many_pages_you_available_n"
 msgstr ""
 
-#: states/printer.py:86
+#: states/printer.py:90
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:98
+#: states/printer.py:100
 msgid "canceled"
 msgstr ""
 
-#: states/printer.py:113
+#: states/printer.py:117
+msgid "confirm_printing_file"
+msgstr ""
+
+#: states/printer.py:131
+msgid "file_sent_to_print"
+msgstr ""
+
+#: states/printer.py:159
 msgid "print_canceled"
 msgstr ""
 
-#: states/printer.py:116
+#: states/printer.py:162
 msgid "not_in_print_state"
 msgstr ""
 
@@ -111,7 +119,11 @@ msgstr ""
 msgid "cancel_print"
 msgstr ""
 
-#: utils/keyboards.py:36
+#: utils/keyboards.py:36 utils/keyboards.py:42
 msgid "cancel"
+msgstr ""
+
+#: utils/keyboards.py:41
+msgid "confirm_print_file"
 msgstr ""
 

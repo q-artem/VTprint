@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-20 00:33+0300\n"
+"POT-Creation-Date: 2025-09-23 08:22+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -32,11 +32,11 @@ msgstr "Вы не в настройках печати"
 msgid "selected_language"
 msgstr "Выбран язык: {}"
 
-#: states/printer.py:28
+#: states/printer.py:29
 msgid "file_is_not_pdf"
 msgstr "Поддерживаются только PDF-файлы"
 
-#: states/printer.py:32
+#: states/printer.py:33
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 "Файл слишком большой, максимальный размер файла - 20 МБ. Сожмите файл, "
@@ -55,19 +55,28 @@ msgstr ""
 "Слишком много страниц, вам доступно {}. Новые страницы станут доступны "
 "завтра. Попробуйте ещё раз"
 
-#: states/printer.py:86
+#: states/printer.py:90
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Диапазоны заданы: \"{}\". Страниц к печати {} из {} доступных"
 
-#: states/printer.py:98
+#: states/printer.py:100
 msgid "canceled"
 msgstr "Действие отменено"
 
-#: states/printer.py:113
+#: states/printer.py:117
+msgid "confirm_printing_file"
+msgstr ""
+
+#: states/printer.py:131
+#, fuzzy
+msgid "file_sent_to_print"
+msgstr "Страниц к печати: <u>{}</u>"
+
+#: states/printer.py:159
 msgid "print_canceled"
 msgstr "Печать отменена"
 
-#: states/printer.py:116
+#: states/printer.py:162
 msgid "not_in_print_state"
 msgstr "Вы не в настройках печати"
 
@@ -120,9 +129,13 @@ msgstr "Подтвердить печать"
 msgid "cancel_print"
 msgstr "Отменить печать"
 
-#: utils/keyboards.py:36
+#: utils/keyboards.py:36 utils/keyboards.py:42
 msgid "cancel"
 msgstr "Отменить"
+
+#: utils/keyboards.py:41
+msgid "confirm_print_file"
+msgstr ""
 
 #~ msgid "processing_file"
 #~ msgstr ""

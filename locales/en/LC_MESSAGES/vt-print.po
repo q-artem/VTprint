@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-20 00:33+0300\n"
+"POT-Creation-Date: 2025-09-23 08:22+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -31,11 +31,11 @@ msgstr "You not in print settings"
 msgid "selected_language"
 msgstr "Selected language: {}"
 
-#: states/printer.py:28
+#: states/printer.py:29
 msgid "file_is_not_pdf"
 msgstr "Only PDF format is supported"
 
-#: states/printer.py:32
+#: states/printer.py:33
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 "The file is too big. Max size is 20MB. \n"
@@ -55,19 +55,28 @@ msgstr ""
 "Too many pages, you available {}. New pages will be available tomorrow. "
 "Try again"
 
-#: states/printer.py:86
+#: states/printer.py:90
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Ranges accepted: \"{}\". Pages to print: {} from {} available"
 
-#: states/printer.py:98
+#: states/printer.py:100
 msgid "canceled"
 msgstr "Action canceled"
 
-#: states/printer.py:113
+#: states/printer.py:117
+msgid "confirm_printing_file"
+msgstr ""
+
+#: states/printer.py:131
+#, fuzzy
+msgid "file_sent_to_print"
+msgstr "Pages to print: <u>{}</u>"
+
+#: states/printer.py:159
 msgid "print_canceled"
 msgstr "Print canceled"
 
-#: states/printer.py:116
+#: states/printer.py:162
 msgid "not_in_print_state"
 msgstr "You not in print settings"
 
@@ -94,7 +103,7 @@ msgstr "Pages amount: <u>{}</u>"
 
 #: states/printer_utils.py:86
 msgid "pages_ranges"
-msgstr "<b>Selected pages ranges:</d> <u>{}</u>"
+msgstr "<b>Selected pages ranges:</b> <u>{}</u>"
 
 #: states/printer_utils.py:88
 msgid "pages_to_print"
@@ -120,9 +129,13 @@ msgstr "Confirm print"
 msgid "cancel_print"
 msgstr "Cancel print"
 
-#: utils/keyboards.py:36
+#: utils/keyboards.py:36 utils/keyboards.py:42
 msgid "cancel"
 msgstr "Cancel"
+
+#: utils/keyboards.py:41
+msgid "confirm_print_file"
+msgstr ""
 
 #~ msgid "processing_file"
 #~ msgstr ""

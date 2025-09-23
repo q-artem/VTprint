@@ -74,7 +74,7 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
             _str += prefix + "\n\n"
 
         if file_name:
-            _str += _("file_name").format(html.escape(file_name)) + "\n"
+            _str += _("file_name").format(file_name) + "\n"
         if file_size_converted:
             _str += _("file_size").format(file_size_converted) + "\n"
         if pages_total:

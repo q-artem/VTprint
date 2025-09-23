@@ -1,5 +1,6 @@
 from aiogram import Router, Bot, F, types
 from aiogram.enums import ContentType
+import html
 
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
@@ -11,16 +12,16 @@ from states.printer_utils import validate_pages_ranges, count_pages, build_file_
 from utils.FSM import GetPagesState, PrintStates
 from utils.FSM_data_classes import PrintData
 from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory, \
-    CanselEnterPagesRangesCallbackFactory
+    CanselEnterPagesRangesCallbackFactory, ConfirmPrintFileCallbackFactory
 from utils.files_utils import get_file
-from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard
+from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard, get_confirm_print_file_keyboard
 
 from utils.FSM_utils import set_user_data, get_user_data
 
 router = Router()
 
 
-@router.message(F.content_type == ContentType.DOCUMENT, StateFilter(None))
+@router.message(F.content_type == ContentType.DOCUMENT)
 async def handle_document(message: types.Message, bot: Bot, session: AsyncSession, state: FSMContext, _):
     assert message.document is not None  # на всякий случай
 
@@ -39,7 +40,7 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
     await set_user_data(state, PrintData(
         chat_id=message.chat.id,
         file_id=message.document.file_id,
-        file_name=message.document.file_name,
+        file_name=html.escape(message.document.file_name),
         file_size_converted=await convert_file_size(message.document.file_size),
         pages_total=pages_total,
         pages_to_print=pages_total,  # страниц к печати
@@ -52,7 +53,6 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
     async with get_user_data(state, PrintData) as user_data:
         user_data.info_message_id = info_message.message_id
 
-    # await message.reply(_("file_sent_to_print"))
     await state.set_state(PrintStates.setting_parameters)
     print(message.document)
 
@@ -60,7 +60,7 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 ###################### Get pages range ######################
 
 
-@router.callback_query(StateFilter(PrintStates.setting_parameters), ChoicePageRangeCallbackFactory.filter())
+@router.callback_query(PrintStates.setting_parameters, ChoicePageRangeCallbackFactory.filter())
 async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
         await bot.edit_message_text(
@@ -105,8 +105,52 @@ async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, stat
     await state.set_state(PrintStates.setting_parameters)
     await callback.answer()
 
-############################################################
+############################# Print file ###############################
 
+
+@router.callback_query(PrintStates.setting_parameters, ConfirmPrintFileCallbackFactory.filter())
+async def handle_confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    async with get_user_data(state, PrintData) as user_data:
+        await bot.edit_message_text(
+            chat_id=user_data.chat_id,
+            message_id=user_data.info_message_id,
+            text=_("confirm_printing_file").format(user_data.file_name),
+            reply_markup=get_confirm_print_file_keyboard(_)
+        )
+
+    await state.set_state(PrintStates.confirming)
+    await callback.answer()
+
+
+@router.callback_query(PrintStates.confirming, ConfirmPrintFileCallbackFactory.filter())
+async def confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    async with get_user_data(state, PrintData) as user_data:
+        await bot.edit_message_text(
+            chat_id=user_data.chat_id,
+            message_id=user_data.info_message_id,
+            text=_("file_sent_to_print")
+        )
+
+    await state.clear()
+    await callback.answer()
+
+
+@router.callback_query(PrintStates.confirming, CancelPrintFileCallbackFactory.filter())
+async def cancel_confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    async with get_user_data(state, PrintData) as user_data:
+        info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
+        await bot.edit_message_text(
+            chat_id=user_data.chat_id,
+            message_id=user_data.info_message_id,
+            text=info_mess,
+            reply_markup=get_print_file_menu_keyboard(_)
+        )
+
+    await state.set_state(PrintStates.setting_parameters)
+    await callback.answer()
+
+
+############################# Confirming ##############################
 
 @router.callback_query(PrintStates.setting_parameters, CancelPrintFileCallbackFactory.filter())
 async def handle_cancel_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
