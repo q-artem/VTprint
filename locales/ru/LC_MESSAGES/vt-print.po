@@ -68,9 +68,8 @@ msgid "confirm_printing_file"
 msgstr ""
 
 #: states/printer.py:131
-#, fuzzy
 msgid "file_sent_to_print"
-msgstr "Страниц к печати: <u>{}</u>"
+msgstr "Файл успешно отправлен на печать 🎉\nОстаток страниц: {}"
 
 #: states/printer.py:159
 msgid "print_canceled"
