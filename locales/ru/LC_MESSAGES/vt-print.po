@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-09-23 08:22+0300\n"
+"POT-Creation-Date: 2025-09-27 07:42+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -32,50 +32,56 @@ msgstr "Вы не в настройках печати"
 msgid "selected_language"
 msgstr "Выбран язык: {}"
 
-#: states/printer.py:29
+#: states/printer.py:30
 msgid "file_is_not_pdf"
 msgstr "Поддерживаются только PDF-файлы"
 
-#: states/printer.py:33
+#: states/printer.py:34
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 "Файл слишком большой, максимальный размер файла - 20 МБ. Сожмите файл, "
 "например <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">здесь</a>"
 
-#: states/printer.py:69
+#: states/printer.py:70
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Введите диапазоны страниц, например: \n"
 "1-5,7,8-10\n"
 "Страниц в файле: {}. Страниц доступно: {}"
 
-#: states/printer.py:83
+#: states/printer.py:84
 msgid "too_many_pages_you_available_n"
 msgstr ""
 "Слишком много страниц, вам доступно {}. Новые страницы станут доступны "
 "завтра. Попробуйте ещё раз"
 
-#: states/printer.py:90
+#: states/printer.py:91
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Диапазоны заданы: \"{}\". Страниц к печати {} из {} доступных"
 
-#: states/printer.py:100
+#: states/printer.py:101
 msgid "canceled"
 msgstr "Действие отменено"
 
-#: states/printer.py:117
+#: states/printer.py:118
+msgid "copies_amount_selecting"
+msgstr ""
+
+#: states/printer.py:134
 msgid "confirm_printing_file"
 msgstr ""
 
-#: states/printer.py:131
+#: states/printer.py:148
 msgid "file_sent_to_print"
-msgstr "Файл успешно отправлен на печать 🎉\nОстаток страниц: {}"
+msgstr ""
+"Файл успешно отправлен на печать 🎉\n"
+"Остаток страниц: {}"
 
-#: states/printer.py:159
+#: states/printer.py:176
 msgid "print_canceled"
 msgstr "Печать отменена"
 
-#: states/printer.py:162
+#: states/printer.py:179
 msgid "not_in_print_state"
 msgstr "Вы не в настройках печати"
 
@@ -108,31 +114,42 @@ msgstr "<b>Выбранные диапазоны страниц:</b> <u>{}</u>"
 msgid "pages_to_print"
 msgstr "Страниц к печати: <u>{}</u>"
 
-#: states/printer_utils.py:92
+#: states/printer_utils.py:94
 msgid "pages_available"
-msgstr "Доступно страниц: <u>{}</u>. Остаток после печати: <u>{}</u>"
+msgstr "<b>Доступно страниц: <u>{}</u>. Остаток после печати: <u>{}</u></b>"
 
-#: states/printer_utils.py:93
+#: states/printer_utils.py:96
+msgid "you_are_not_enough_pages_set_range_or_try_later"
+msgstr ""
+"<b><u>Вам не хватает страниц для печати, нужно еще {}. Задайте диапазоны, уменьшите количество копий "
+"страниц или попробуйте позже</u></b>"
+
+#: states/printer_utils.py:97
 msgid "sure_to_print_or_change_params"
 msgstr "<i>Подтвердите печать или измените параметры</i>"
 
-#: utils/keyboards.py:26
+#: utils/keyboards.py:27
 msgid "choice_page_range"
 msgstr "Выбрать диапазон страниц"
 
-#: utils/keyboards.py:28
+#: utils/keyboards.py:29
+#, fuzzy
+msgid "choice_copies_amount"
+msgstr "Количество страниц: <u>{}</u>"
+
+#: utils/keyboards.py:31
 msgid "accept_print"
 msgstr "Подтвердить печать"
 
-#: utils/keyboards.py:30
+#: utils/keyboards.py:33
 msgid "cancel_print"
 msgstr "Отменить печать"
 
-#: utils/keyboards.py:36 utils/keyboards.py:42
+#: utils/keyboards.py:39 utils/keyboards.py:45
 msgid "cancel"
 msgstr "Отменить"
 
-#: utils/keyboards.py:41
+#: utils/keyboards.py:44
 msgid "confirm_print_file"
 msgstr ""
 

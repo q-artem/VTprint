@@ -8,11 +8,13 @@ from pypdf import PdfReader
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import User
-from states.printer_utils import validate_pages_ranges, count_pages, build_file_info_message, convert_file_size
+from states.printer_utils import validate_pages_ranges, count_pages, build_file_info_message, convert_file_size, \
+    validate_copies_amount
 from utils.FSM import GetPagesState, PrintStates
 from utils.FSM_data_classes import PrintData
 from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory, \
-    CanselEnterPagesRangesCallbackFactory, ConfirmPrintFileCallbackFactory
+    CanselEnterPagesRangesCallbackFactory, ConfirmPrintFileCallbackFactory, ChoiceAmountCopiesCallbackFactory, \
+    CancelChoiceAmountCopiesCallbackFactory
 from utils.files_utils import get_file
 from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard, get_confirm_print_file_keyboard
 
@@ -84,7 +86,7 @@ async def handle_get_pages(message: types.Message, session: AsyncSession, state:
         return
 
     async with get_user_data(state, PrintData) as user_data:
-        user_data.pages_to_print = pages_amount
+        user_data.pages_to_print = pages_amount * user_data.copies
         user_data.pages_ranges = message.text
 
     pref_info = _("pages_ranges_all_pages_from_n_available").format(message.text, pages_amount, pages_left)
@@ -104,6 +106,47 @@ async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, stat
         user_data.info_message_id = info_message.message_id
     await state.set_state(PrintStates.setting_parameters)
     await callback.answer()
+
+
+######################### Set amount copies ############################
+
+@router.callback_query(PrintStates.setting_parameters, ChoiceAmountCopiesCallbackFactory.filter())
+async def handle_choice_amount_copies(callback: types.CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext, _):
+    async with get_user_data(state, PrintData) as user_data:
+        await bot.edit_message_text(
+            chat_id=user_data.chat_id,
+            message_id=user_data.info_message_id,
+            text=_("copies_amount_selecting_max_copies").format(user_data.pages_total, (await session.get(User, callback.from_user.id)).pages_left),
+            reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory())
+        )
+    await state.set_state(PrintStates.setting_copies)
+    await callback.answer()
+
+
+@router.message(PrintStates.setting_copies)
+async def handle_get_amount_copies(message: types.Message, session: AsyncSession, state: FSMContext, _):
+    if not await validate_copies_amount(_, message):
+        return
+    copies_amount = int(message.text)
+
+    async with get_user_data(state, PrintData) as user_data:
+        user_data.pages_to_print = user_data.pages_to_print // user_data.copies * copies_amount
+        user_data.copies = copies_amount
+
+        pages_left = (await session.get(User, message.from_user.id)).pages_left
+        pref_info = _("copies_amount_all_pages_from_n_available").format(copies_amount, user_data.pages_to_print, pages_left)
+        info_mess = await build_file_info_message(_, state, session, message.from_user.id, pref_info)
+        info_message = await message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
+
+        user_data.info_message_id = info_message.message_id
+
+    await state.set_state(PrintStates.setting_parameters)
+
+
+
+    # тут еще отмену
+
+
 
 ############################# Print file ###############################
 

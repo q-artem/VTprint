@@ -13,3 +13,9 @@ class CanselEnterPagesRangesCallbackFactory(CallbackData, prefix="cancel_enter_p
 
 class ConfirmPrintFileCallbackFactory(CallbackData, prefix="confirm_print_file"):
     pass
+
+class ChoiceAmountCopiesCallbackFactory(CallbackData, prefix="choice_amount_copies"):
+    pass
+
+class CancelChoiceAmountCopiesCallbackFactory(CallbackData, prefix="cancel_choice_amount_copies"):
+    pass

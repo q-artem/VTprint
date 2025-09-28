@@ -7,7 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import User
 from utils.FSM_data_classes import PrintData
 from utils.FSM_utils import get_user_data
-from utils.callback_factory import CancelPrintFileCallbackFactory, CanselEnterPagesRangesCallbackFactory
+from utils.callback_factory import CancelPrintFileCallbackFactory, CanselEnterPagesRangesCallbackFactory, \
+    CancelChoiceAmountCopiesCallbackFactory
 from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard
 
 
@@ -89,7 +90,11 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
         _str += "\n"
         if pages_available:
-            _str += "<b>" + _("pages_available").format(str(pages_available), str(pages_available - pages_to_print)) + "</b>" + "\n"
+            pages_left = pages_available - pages_to_print
+            if pages_left >= 0:
+                _str += _("pages_available").format(str(pages_available), str(pages_left)) + "\n"
+            else:
+                _str += _("you_are_not_enough_pages_set_range_or_try_later").format(str(-pages_left)) + "\n"
         _str += _("sure_to_print_or_change_params")
 
         return _str
@@ -104,3 +109,14 @@ async def convert_file_size(file_size: int) -> str:
         else:
             file_size = str(round(file_size / 1024 / 1024, 2)) + " MB"
     return file_size
+
+async def validate_copies_amount(_, message: types.Message) -> bool:
+    try:
+        copies = int(message.text)
+    except ValueError as e:
+        await message.answer(_("please_enter_int"), reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory()))
+        return False
+    if copies < 1 or copies > 100:
+        await message.answer(_("int_must_be_between_1_and_100"), reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory()))
+        return False
+    return True

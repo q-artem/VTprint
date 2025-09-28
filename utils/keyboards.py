@@ -2,9 +2,10 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from utils.callback_factory import ChoicePageRangeCallbackFactory, \
-    CancelPrintFileCallbackFactory, ConfirmPrintFileCallbackFactory
+    CancelPrintFileCallbackFactory, ConfirmPrintFileCallbackFactory, ChoiceAmountCopiesCallbackFactory
 
 from aiogram.filters.callback_data import CallbackData
+from aiogram.fsm.context import FSMContext
 
 
 
@@ -25,6 +26,8 @@ def get_print_file_menu_keyboard(_):
     builder = InlineKeyboardBuilder()
     builder.button(text=_("choice_page_range"),
                    callback_data=ChoicePageRangeCallbackFactory())
+    builder.button(text=_("choice_copies_amount"),
+                   callback_data=ChoiceAmountCopiesCallbackFactory())
     builder.button(text=_("accept_print"),
                    callback_data=ConfirmPrintFileCallbackFactory())
     builder.button(text=_("cancel_print"), callback_data=CancelPrintFileCallbackFactory())
