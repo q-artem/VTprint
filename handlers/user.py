@@ -14,6 +14,7 @@ from utils.keyboards import get_lang_keyboard, get_admin_panel_keyboard
 
 router = Router()
 
+
 @router.message(CommandStart(deep_link=True))
 @router.message(Command("start"))
 async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: CommandObject):
@@ -51,11 +52,15 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
         db_user = User(user_id=user_id, language_code=language.code, group_id=group.id, pages_left=group.sheets_per_day)
         session.add(db_user)
         await session.commit()
-        await message.answer("Вы добавлены в группу {}. Вам доступно {} страниц в день / Success. You're in the {} group now. Each day you can print {} pages.".format(group.name, group.sheets_per_day, group.name, group.sheets_per_day))
+        await message.answer(
+            "Вы добавлены в группу {}. Вам доступно {} страниц в день / Success. You're in the {} group now. Each day you can print {} pages.".format(
+                group.name, group.sheets_per_day, group.name, group.sheets_per_day))
     else:
         db_user.group_id = group.id
         await session.commit()
-        await message.answer("Вы перемещены в группу {}. Новые страницы будут зачислены завтра в соответствии с вашей новой группой / You are moved to group {}. You'll get your new group's set of pages tomorrow.".format(group.name, group.name))
+        await message.answer(
+            "Вы перемещены в группу {}. Новые страницы будут зачислены завтра в соответствии с вашей новой группой / You are moved to group {}. You'll get your new group's set of pages tomorrow.".format(
+                group.name, group.name))
 
     await message.answer("Выберите язык / Please select a language", reply_markup=get_lang_keyboard())
 
@@ -96,7 +101,6 @@ async def send_message(message: Message, session: AsyncSession, command: Command
         await bot.send_message(message.from_user.id, f"Успешно. Забанен <code>{args}</code>")
 
 
-
 @router.message(Command("unban"))
 async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
     if message.from_user.id in [1722948286]:
@@ -112,9 +116,9 @@ async def send_message(message: Message, session: AsyncSession, command: Command
 
 
 @router.message(Command("help"))
-async def help_mess(message: Message, session: AsyncSession, _):
-    db_user = await session.get(User, message.from_user.id)
-    await message.answer(_("help").format(db_user.group.name, db_user.group.sheets_per_day))
+async def help_mess(user_id, bot: Bot, session: AsyncSession, _):
+    db_user = await session.get(User, user_id)
+    await bot.send_message(user_id, _("help").format(db_user.group.name, db_user.group.sheets_per_day))
 
 
 @router.message(Command("report"))
@@ -126,17 +130,16 @@ async def report(message: Message, command: Command, bot: Bot, state: FSMContext
     db_user = await session.get(User, message.from_user.id)
     async with get_user_data(state, PrintData) as user_data:
         report_mess = (f"Репорт от юзера <code>{message.from_user.id}</code>\n"
-                  f"Данные: {user_data}\n"
-                  f"Состояние: {await state.get_state()}\n"
-                  f"Юзер в бд: {html.escape(str(db_user.__dict__))}\n\n"
-                  f"Сообщение:\n"
-                  f"{args}")
+                       f"Данные: {user_data}\n"
+                       f"Состояние: {await state.get_state()}\n"
+                       f"Юзер в бд: {html.escape(str(db_user.__dict__))}\n\n"
+                       f"Сообщение:\n"
+                       f"{args}")
         await bot.send_message(1722948286, report_mess)
 
 
-
 @router.callback_query(F.data.startswith("set_lang:"))
-async def set_lang(callback: CallbackQuery, session: AsyncSession, _):
+async def set_lang(callback: CallbackQuery, bot: Bot, session: AsyncSession, _):
     lang_code = callback.data.split(":")[1]
     user_id = callback.from_user.id
 
@@ -145,7 +148,8 @@ async def set_lang(callback: CallbackQuery, session: AsyncSession, _):
         db_user.language_code = lang_code
         await session.commit()
 
-    await callback.message.answer(_("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
-    await help_mess(callback.message, _)
+    await callback.message.answer(
+        _("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
+    await help_mess(callback.from_user.id, bot, session, _)
     await callback.message.answer(_("to_start_work_send_pdf", lang_code))
     await callback.answer()

@@ -21,7 +21,7 @@ async def print_file(user_data: PrintData, bot: Bot) -> bool:
                 "-d",
                 "Canon_MF4400_Series",
                 "--",
-                file,         ##############################
+                file,
             )
             await process.wait()
             await delete_file(user_data.file_id)
