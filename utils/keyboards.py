@@ -43,4 +43,5 @@ def get_confirm_print_file_keyboard(_):
     builder = InlineKeyboardBuilder()
     builder.button(text=_("confirm_print_file"), callback_data=ConfirmPrintFileCallbackFactory())
     builder.button(text=_("cancel"), callback_data=CancelPrintFileCallbackFactory())
+    builder.adjust(1)
     return builder.as_markup()

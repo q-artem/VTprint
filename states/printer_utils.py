@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import User
 from utils.FSM_data_classes import PrintData
 from utils.FSM_utils import get_user_data
-from utils.callback_factory import CancelPrintFileCallbackFactory, CanselEnterPagesRangesCallbackFactory, \
+from utils.callback_factory import CanselEnterPagesRangesCallbackFactory, \
     CancelChoiceAmountCopiesCallbackFactory
-from utils.keyboards import get_print_file_menu_keyboard, get_cancel_keyboard
+from utils.keyboards import get_cancel_keyboard
 
 
 async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> bool:
@@ -66,6 +66,7 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
         pages_total = user_data.pages_total
 
         pages_ranges = user_data.pages_ranges
+        copies_amount = user_data.copies
         pages_to_print = user_data.pages_to_print
 
         pages_available = (await session.get(User, user_id)).pages_left
@@ -83,8 +84,9 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
         _str += "\n"
         if pages_ranges:
-            print(pages_ranges)
             _str += _("pages_ranges").format(pages_ranges) + "\n"
+        if copies_amount != 1:
+            _str += _("copies_amount").format(copies_amount) + "\n"
         if pages_to_print:
             _str += _("pages_to_print").format(str(pages_to_print)) + "\n"
 
@@ -120,3 +122,10 @@ async def validate_copies_amount(_, message: types.Message) -> bool:
         await message.answer(_("int_must_be_between_1_and_100"), reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory()))
         return False
     return True
+
+async def check_access_to_print(_, state: FSMContext, session: AsyncSession, user_id: int) -> bool:
+    pages_left = (await session.get(User, user_id)).pages_left
+    async with get_user_data(state, PrintData) as user_data:
+        if user_data.pages_to_print > pages_left:
+            return False
+        return True

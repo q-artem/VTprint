@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from database.base import Base
 
@@ -27,6 +27,7 @@ class User(Base):
     language_code = Column(String(2), ForeignKey("languages.code"), nullable=False)
     group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
     pages_left = Column(Integer, nullable=False)
+    banned = Column(Boolean, nullable=False, default=False)
 
     language = relationship("Language", back_populates="users")
     group = relationship("Group", back_populates="users")

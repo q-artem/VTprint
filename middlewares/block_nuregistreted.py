@@ -25,6 +25,18 @@ class BlockUnregisteredMiddleware(BaseMiddleware):
 
         db_user = await session.get(User, user_id)
 
+        # забаненые
+        if db_user and db_user.banned:
+            if isinstance(event, Message):
+                await event.answer(
+                    "К сожалению, вы были забанены. Наверное было за что / Unfortunately, you are banned.",
+                )
+            elif isinstance(event, CallbackQuery):
+                await event.message.answer(
+                    "К сожалению, вы были забанены. Наверное было за что / Unfortunately, you are banned.",
+                )
+            return None
+
         # if in group
         if db_user and db_user.group_id is not None:
             return await handler(event, data)
@@ -43,6 +55,6 @@ class BlockUnregisteredMiddleware(BaseMiddleware):
                     await event.message.answer(
                         "Вы не привязаны к группе. Используйте пригласительную ссылку. / You are not bound to a group. Use an invitation link.",
                     )
-                return
+                return None
 
         return await handler(event, data)
