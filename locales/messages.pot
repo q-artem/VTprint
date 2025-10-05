@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-10-05 16:55+0300\n"
+"POT-Creation-Date: 2025-10-05 19:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
-#: handlers/user.py:77
+#: handlers/user.py:121
 msgid "to_start_work_send_pdf"
 msgstr ""
 
@@ -26,7 +26,15 @@ msgstr ""
 msgid "you_are_not_in_print_state"
 msgstr ""
 
-#: handlers/user.py:76
+#: handlers/user.py:88
+msgid "help"
+msgstr ""
+
+#: handlers/user.py:95
+msgid "using_report"
+msgstr ""
+
+#: handlers/user.py:119
 msgid "selected_language"
 msgstr ""
 
@@ -66,15 +74,15 @@ msgstr ""
 msgid "confirm_printing_file"
 msgstr ""
 
-#: states/printer.py:199
+#: states/printer.py:203
 msgid "file_sent_to_print"
 msgstr ""
 
-#: states/printer.py:202
+#: states/printer.py:206
 msgid "error_printing_file"
 msgstr ""
 
-#: states/printer.py:229
+#: states/printer.py:233
 msgid "print_canceled"
 msgstr ""
 

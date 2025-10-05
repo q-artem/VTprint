@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
+
 from database.base import Base
 
 class Language(Base):
@@ -29,5 +30,5 @@ class User(Base):
     pages_left = Column(Integer, nullable=False)
     banned = Column(Boolean, nullable=False, default=False)
 
-    language = relationship("Language", back_populates="users")
-    group = relationship("Group", back_populates="users")
+    language = relationship("Language", back_populates="users", lazy="selectin")
+    group = relationship("Group", back_populates="users", lazy="selectin")

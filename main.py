@@ -37,7 +37,7 @@ async def main():
 
     scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
 
-    scheduler.add_job(daily_reset_limits, "cron", hour=18, minute=3, second=10)
+    scheduler.add_job(daily_reset_limits, "cron", hour=0, minute=0, second=0)
     scheduler.start()
 
     storage = RedisStorage(Redis())

@@ -1,10 +1,15 @@
+import html
+
 from aiogram import Router, F, Bot
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command, CommandStart, CommandObject
+from aiogram.fsm.context import FSMContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import User, Group, Language
+from utils.FSM_data_classes import PrintData
+from utils.FSM_utils import get_user_data
 from utils.keyboards import get_lang_keyboard, get_admin_panel_keyboard
 
 router = Router()
@@ -63,6 +68,73 @@ async def admin(message: Message, session: AsyncSession, bot: Bot):
         await message.answer("Ты не админ, бебебе")
 
 
+@router.message(Command("snd"))
+async def send_message(message: Message, command: Command, bot: Bot):
+    if message.from_user.id in [1722948286]:
+        args = command.args
+        try:
+            user_id = args.split()[0]
+            mess = " ".join(args.split()[1:])
+            await bot.send_message(user_id, mess)
+        except Exception as e:
+            await bot.send_message(message.from_user.id, html.escape(str(e)))
+            return
+        await bot.send_message(message.from_user.id, f"Успешно. Отправлено сообщение <code>{mess}</code>")
+
+
+@router.message(Command("ban"))
+async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
+    if message.from_user.id in [1722948286]:
+        args = command.args
+        try:
+            db_user = await session.get(User, args)
+            db_user.banned = 1
+            await session.commit()
+        except Exception as e:
+            await bot.send_message(message.from_user.id, html.escape(str(e)))
+            return
+        await bot.send_message(message.from_user.id, f"Успешно. Забанен <code>{args}</code>")
+
+
+
+@router.message(Command("unban"))
+async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
+    if message.from_user.id in [1722948286]:
+        args = command.args
+        try:
+            db_user = await session.get(User, args)
+            db_user.banned = 0
+            await session.commit()
+        except Exception as e:
+            await bot.send_message(message.from_user.id, html.escape(str(e)))
+            return
+        await bot.send_message(message.from_user.id, f"Успешно. Разбанен <code>{args}</code>")
+
+
+@router.message(Command("help"))
+async def help_mess(message: Message, session: AsyncSession, _):
+    db_user = await session.get(User, message.from_user.id)
+    await message.answer(_("help").format(db_user.group.name, db_user.group.sheets_per_day))
+
+
+@router.message(Command("report"))
+async def report(message: Message, command: Command, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    args = command.args
+    if not args:
+        await message.answer(_("using_report"))
+        return
+    db_user = await session.get(User, message.from_user.id)
+    async with get_user_data(state, PrintData) as user_data:
+        report_mess = (f"Репорт от юзера <code>{message.from_user.id}</code>\n"
+                  f"Данные: {user_data}\n"
+                  f"Состояние: {await state.get_state()}\n"
+                  f"Юзер в бд: {html.escape(str(db_user.__dict__))}\n\n"
+                  f"Сообщение:\n"
+                  f"{args}")
+        await bot.send_message(1722948286, report_mess)
+
+
+
 @router.callback_query(F.data.startswith("set_lang:"))
 async def set_lang(callback: CallbackQuery, session: AsyncSession, _):
     lang_code = callback.data.split(":")[1]
@@ -74,5 +146,6 @@ async def set_lang(callback: CallbackQuery, session: AsyncSession, _):
         await session.commit()
 
     await callback.message.answer(_("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
+    await help_mess(callback.message, _)
     await callback.message.answer(_("to_start_work_send_pdf", lang_code))
     await callback.answer()
