@@ -9,7 +9,8 @@ from database.models import User  # твои модели
 
 
 class I18nDatabaseMiddleware(BaseMiddleware):
-    async def get_locale(self, event: Message | CallbackQuery, data: Dict[str, Any]) -> str:
+    @staticmethod
+    async def get_locale(event: Message | CallbackQuery, data: Dict[str, Any]) -> str:
         user_id = event.from_user.id
 
         session: AsyncSession = data.get("session")

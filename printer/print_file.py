@@ -1,7 +1,7 @@
 from asyncio import create_subprocess_exec
 from venv import logger
 
-from aiogram import types, Bot
+from aiogram import Bot
 
 from config.defines import DEBUG
 from utils.FSM_data_classes import PrintData

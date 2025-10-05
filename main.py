@@ -1,5 +1,7 @@
 from config.defines import DEBUG, COMPILE_TRANSLATES_ON_START
 from utils.compile_translates import compile_translates
+from utils.daily_reset_limits import daily_reset_limits
+
 compile_translates(COMPILE_TRANSLATES_ON_START)
 
 import asyncio
@@ -21,6 +23,7 @@ from middlewares.i18n_db import I18nDatabaseMiddleware
 
 from aiogram.fsm.storage.redis import RedisStorage
 from redis.asyncio import Redis
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import states.printer
 import handlers.user
@@ -31,6 +34,11 @@ import handlers.unprocessed_updates
 async def main():
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("pypdf").setLevel(logging.ERROR)  # ТИХОНЕЧКО
+
+    scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
+
+    scheduler.add_job(daily_reset_limits, "cron", hour=18, minute=3, second=10)
+    scheduler.start()
 
     storage = RedisStorage(Redis())
 
