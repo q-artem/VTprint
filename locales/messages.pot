@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-10-05 19:31+0300\n"
+"POT-Creation-Date: 2025-10-05 20:26+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
-#: handlers/user.py:121
+#: handlers/user.py:158
 msgid "to_start_work_send_pdf"
 msgstr ""
 
@@ -26,15 +26,15 @@ msgstr ""
 msgid "you_are_not_in_print_state"
 msgstr ""
 
-#: handlers/user.py:88
+#: handlers/user.py:125
 msgid "help"
 msgstr ""
 
-#: handlers/user.py:95
+#: handlers/user.py:132
 msgid "using_report"
 msgstr ""
 
-#: handlers/user.py:119
+#: handlers/user.py:156
 msgid "selected_language"
 msgstr ""
 
@@ -46,43 +46,47 @@ msgstr ""
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 
-#: states/printer.py:72
+#: states/printer.py:44
+msgid "file_processing_error"
+msgstr ""
+
+#: states/printer.py:75
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 
-#: states/printer.py:86
+#: states/printer.py:89
 msgid "too_many_pages_you_available_n"
 msgstr ""
 
-#: states/printer.py:93
+#: states/printer.py:96
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:103 states/printer.py:152
+#: states/printer.py:106 states/printer.py:155
 msgid "canceled"
 msgstr ""
 
-#: states/printer.py:120
+#: states/printer.py:123
 msgid "copies_amount_selecting_max_copies"
 msgstr ""
 
-#: states/printer.py:139
+#: states/printer.py:142
 msgid "copies_amount_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:170
+#: states/printer.py:173
 msgid "confirm_printing_file"
 msgstr ""
 
-#: states/printer.py:203
+#: states/printer.py:206
 msgid "file_sent_to_print"
 msgstr ""
 
-#: states/printer.py:206
+#: states/printer.py:209
 msgid "error_printing_file"
 msgstr ""
 
-#: states/printer.py:233
+#: states/printer.py:236
 msgid "print_canceled"
 msgstr ""
 

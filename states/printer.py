@@ -38,7 +38,11 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 
     file = await get_file(message.document.file_id, message.chat.id, bot)
 
-    pages_total = len(PdfReader(file).pages)
+    try:
+        pages_total = len(PdfReader(file).pages)
+    except Exception as e:
+        await message.reply(_("file_processing_error").format(html.escape(str(e))))
+        return
 
     await set_user_data(state, PrintData(
         chat_id=message.chat.id,

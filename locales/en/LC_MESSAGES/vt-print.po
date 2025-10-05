@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-10-05 19:31+0300\n"
+"POT-Creation-Date: 2025-10-05 20:26+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
-#: handlers/user.py:121
+#: handlers/user.py:158
 msgid "to_start_work_send_pdf"
 msgstr "Send a PDF file to start"
 
@@ -27,7 +27,7 @@ msgstr "Send a PDF file to start"
 msgid "you_are_not_in_print_state"
 msgstr "You not in print settings"
 
-#: handlers/user.py:88
+#: handlers/user.py:125
 msgid "help"
 msgstr ""
 "Welcome to the VTprint bot!\n"
@@ -35,21 +35,24 @@ msgstr ""
 "Pages available per day: {}\n"
 "\n"
 "The printer is located at Kronverskiy Prospekt, 49, XXXXXXXXXX.\n"
-"To print a file, simply send it as a PDF to this chat, specify your desired print settings, and confirm the print job.\n"
-"If you'd like to report a bug, translation error, or any other issue, please use the /report command.\n"
+"To print a file, simply send it as a PDF to this chat, specify your "
+"desired print settings, and confirm the print job.\n"
+"If you'd like to report a bug, translation error, or any other issue, "
+"please use the /report command.\n"
 "To restart bot use the /start command.\n"
 "\n"
-"The printer is maintained by students, and printing is free of charge for you. Please treat it with care.\n"
+"The printer is maintained by students, and printing is free of charge for"
+" you. Please treat it with care.\n"
 "\n"
 "To display this message again, use the /help command."
 
-#: handlers/user.py:95
+#: handlers/user.py:132
 msgid "using_report"
 msgstr ""
 "Usage: \n"
 "<code>/report</code> &lt;your message&gt;"
 
-#: handlers/user.py:119
+#: handlers/user.py:156
 msgid "selected_language"
 msgstr "Selected language: {}"
 
@@ -64,52 +67,56 @@ msgstr ""
 "Try compressing it, you can do it <a "
 "href=\"https://www.ilovepdf.com/ru/compress_pdf\">here</a>"
 
-#: states/printer.py:72
+#: states/printer.py:44
+msgid "file_processing_error"
+msgstr "Your file could not be processed. Try restoring it or send another one.\nError: {}"
+
+#: states/printer.py:75
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Please type ranges of pages. For example: \n"
 "1-5,7,8-10\n"
 "Pages in file: {}. Pages available: {}"
 
-#: states/printer.py:86
+#: states/printer.py:89
 msgid "too_many_pages_you_available_n"
 msgstr ""
 "Too many pages, you available {}. New pages will be available tomorrow. "
 "Try again"
 
-#: states/printer.py:93
+#: states/printer.py:96
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Ranges accepted: \"{}\". Pages to print: {} (Available: {})"
 
-#: states/printer.py:103 states/printer.py:152
+#: states/printer.py:106 states/printer.py:155
 msgid "canceled"
 msgstr "Action canceled"
 
-#: states/printer.py:120
+#: states/printer.py:123
 msgid "copies_amount_selecting_max_copies"
 msgstr "Enter copies amount, max: 100"
 
-#: states/printer.py:139
+#: states/printer.py:142
 msgid "copies_amount_all_pages_from_n_available"
 msgstr "Amount of copies accepted: {}. Pages to print: {} (Available: {})"
 
-#: states/printer.py:170
+#: states/printer.py:173
 msgid "confirm_printing_file"
 msgstr "Confirm file printing"
 
-#: states/printer.py:203
+#: states/printer.py:206
 msgid "file_sent_to_print"
 msgstr ""
 "File has been successfully sent to printer 🎉\n"
 "Remaining pages: {}"
 
-#: states/printer.py:206
+#: states/printer.py:209
 msgid "error_printing_file"
 msgstr ""
 "An error has occurred. Try again later or report it with the /report "
 "command"
 
-#: states/printer.py:233
+#: states/printer.py:236
 msgid "print_canceled"
 msgstr "Print canceled"
 

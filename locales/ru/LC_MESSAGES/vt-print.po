@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-10-05 19:31+0300\n"
+"POT-Creation-Date: 2025-10-05 20:26+0300\n"
 "PO-Revision-Date: 2025-09-08 13:25+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 #: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
-#: handlers/user.py:121
+#: handlers/user.py:158
 msgid "to_start_work_send_pdf"
 msgstr "Для начала работы отправьте документ в формате PDF"
 
@@ -28,7 +28,7 @@ msgstr "Для начала работы отправьте документ в 
 msgid "you_are_not_in_print_state"
 msgstr "Вы не в настройках печати"
 
-#: handlers/user.py:88
+#: handlers/user.py:125
 msgid "help"
 msgstr ""
 "Приветствуем Вас в боте VTprint! \n"
@@ -47,13 +47,13 @@ msgstr ""
 "\n"
 "Для вывода этого сообщения повторно - команда /help."
 
-#: handlers/user.py:95
+#: handlers/user.py:132
 msgid "using_report"
 msgstr ""
 "Использование: \n"
 "<code>/report</code> &lt;ваше сообщение&gt;"
 
-#: handlers/user.py:119
+#: handlers/user.py:156
 msgid "selected_language"
 msgstr "Выбран язык: {}"
 
@@ -67,50 +67,54 @@ msgstr ""
 "Файл слишком большой, максимальный размер файла - 20 МБ. Сожмите файл, "
 "например <a href=\"https://www.ilovepdf.com/ru/compress_pdf\">здесь</a>"
 
-#: states/printer.py:72
+#: states/printer.py:44
+msgid "file_processing_error"
+msgstr "Ваш файл не удается обработать. Попробуйте восстановить его или отправить другой.\nОшибка: {}"
+
+#: states/printer.py:75
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 "Введите диапазоны страниц, например: \n"
 "1-5,7,8-10\n"
 "Страниц в файле: {}. Страниц доступно: {}"
 
-#: states/printer.py:86
+#: states/printer.py:89
 msgid "too_many_pages_you_available_n"
 msgstr ""
 "Слишком много страниц, вам доступно {}. Новые страницы станут доступны "
 "завтра. Попробуйте ещё раз"
 
-#: states/printer.py:93
+#: states/printer.py:96
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr "Диапазоны заданы: \"{}\". Страниц к печати: {} (Доступно: {})"
 
-#: states/printer.py:103 states/printer.py:152
+#: states/printer.py:106 states/printer.py:155
 msgid "canceled"
 msgstr "Действие отменено"
 
-#: states/printer.py:120
+#: states/printer.py:123
 msgid "copies_amount_selecting_max_copies"
 msgstr "Введите количество копий. Максимум: 100"
 
-#: states/printer.py:139
+#: states/printer.py:142
 msgid "copies_amount_all_pages_from_n_available"
 msgstr "Количество копий задано: {}. Страниц к печати: {} (Доступно: {})"
 
-#: states/printer.py:170
+#: states/printer.py:173
 msgid "confirm_printing_file"
 msgstr "Подтвердите печать файла"
 
-#: states/printer.py:203
+#: states/printer.py:206
 msgid "file_sent_to_print"
 msgstr ""
 "Файл успешно отправлен на печать 🎉\n"
 "Остаток страниц: {}"
 
-#: states/printer.py:206
+#: states/printer.py:209
 msgid "error_printing_file"
 msgstr "Произошла ошибка. Попробуйте позднее или сообщите о ней командой /report"
 
-#: states/printer.py:233
+#: states/printer.py:236
 msgid "print_canceled"
 msgstr "Печать отменена"
 
