@@ -120,9 +120,9 @@ async def help_mess(message: Message, bot: Bot, session: AsyncSession, _):
     await send_help_message(session, message.from_user.id, bot, _)
 
 
-async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _):
+async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _, lang_code):
     db_user = await session.get(User, user_id)
-    await bot.send_message(user_id, _("help").format(db_user.group.name, db_user.group.sheets_per_day))
+    await bot.send_message(user_id, _("help", lang_code).format(db_user.group.name, db_user.group.sheets_per_day))
 
 
 @router.message(Command("report"))
@@ -154,6 +154,6 @@ async def set_lang(callback: CallbackQuery, bot: Bot, session: AsyncSession, _):
 
     await callback.message.answer(
         _("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
-    await send_help_message(session, user_id, bot, _)
+    await send_help_message(session, user_id, bot, _, lang_code)
     await callback.message.answer(_("to_start_work_send_pdf", lang_code))
     await callback.answer()
