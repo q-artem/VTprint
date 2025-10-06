@@ -47,7 +47,7 @@ async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> 
 
 
 async def count_pages(pages_ranges: str) -> int:
-    pages = pages_ranges.split(",")
+    pages = pages_ranges.replace(" ", "").split(",")
     count = 0
     for q in pages:
         if "-" in q:
