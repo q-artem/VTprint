@@ -1,7 +1,7 @@
 import os
 
 from aiofiles import tempfile
-from aiogram import types, Bot
+from aiogram import Bot
 from aiogram.utils.chat_action import ChatActionSender
 
 local_saved_files = dict()

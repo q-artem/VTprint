@@ -13,7 +13,6 @@ class BlockUnregisteredMiddleware(BaseMiddleware):
     ) -> Any:
         session: AsyncSession = data.get("session")
 
-        user_id = None
         if isinstance(event, Message):
             user_id = event.from_user.id
             text = event.text or ""

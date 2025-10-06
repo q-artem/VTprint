@@ -1,4 +1,3 @@
-from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.sql.expression import select
 
 from database.models import User, Group

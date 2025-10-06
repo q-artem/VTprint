@@ -1,5 +1,3 @@
-import html
-
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,14 +26,14 @@ async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> 
                 if int(start) >= int(end) or int(start) <= last_number:
                     break
                 last_number = int(end)
-            except Exception as e:
+            except Exception:
                 break
         else:
             try:
                 if int(q) <= last_number:
                     break
                 last_number = int(q)
-            except Exception as e:
+            except Exception:
                 break
     else:
         if last_number > pages_total:
@@ -60,7 +58,6 @@ async def count_pages(pages_ranges: str) -> int:
 
 async def build_file_info_message(_, state: FSMContext, session: AsyncSession, user_id: int, prefix: str | None = None) -> str:
     async with get_user_data(state, PrintData) as user_data:
-        file_id = user_data.file_id
         file_name = user_data.file_name
         file_size_converted = user_data.file_size_converted
         pages_total = user_data.pages_total
@@ -115,7 +112,7 @@ async def convert_file_size(file_size: int) -> str:
 async def validate_copies_amount(_, message: types.Message) -> bool:
     try:
         copies = int(message.text)
-    except ValueError as e:
+    except ValueError:
         await message.answer(_("please_enter_int"), reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory()))
         return False
     if copies < 1 or copies > 100:

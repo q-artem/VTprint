@@ -1,6 +1,5 @@
 import platform
 import subprocess
-from venv import logger
 
 def compile_translates(if_compile):
     if if_compile:

@@ -1,4 +1,3 @@
-from typing import Optional
 from aiogram.filters.callback_data import CallbackData
 
 class ChoicePageRangeCallbackFactory(CallbackData, prefix="choice_page_range"):

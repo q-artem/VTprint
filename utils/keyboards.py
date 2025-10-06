@@ -5,8 +5,6 @@ from utils.callback_factory import ChoicePageRangeCallbackFactory, \
     CancelPrintFileCallbackFactory, ConfirmPrintFileCallbackFactory, ChoiceAmountCopiesCallbackFactory
 
 from aiogram.filters.callback_data import CallbackData
-from aiogram.fsm.context import FSMContext
-
 
 
 def get_lang_keyboard():
@@ -34,10 +32,12 @@ def get_print_file_menu_keyboard(_):
     builder.adjust(1)
     return builder.as_markup()
 
+
 def get_cancel_keyboard(_, callback_factory: CallbackData):
     builder = InlineKeyboardBuilder()
     builder.button(text=_("cancel"), callback_data=callback_factory)
     return builder.as_markup()
+
 
 def get_confirm_print_file_keyboard(_):
     builder = InlineKeyboardBuilder()

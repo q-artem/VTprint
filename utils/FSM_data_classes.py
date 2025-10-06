@@ -1,5 +1,4 @@
-from pydantic import BaseModel, Field
-from aiogram import types
+from pydantic import BaseModel
 
 class PrintData(BaseModel):
     chat_id: int | None = None

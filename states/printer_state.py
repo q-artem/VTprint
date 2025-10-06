@@ -2,7 +2,6 @@ from aiogram import Router, Bot, F, types
 from aiogram.enums import ContentType
 import html
 
-from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from pypdf import PdfReader
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +10,7 @@ from database.models import User
 from printer.print_file import print_file
 from states.printer_utils import validate_pages_ranges, count_pages, build_file_info_message, convert_file_size, \
     validate_copies_amount, check_access_to_print
-from utils.FSM import GetPagesState, PrintStates
+from utils.FSM import PrintStates
 from utils.FSM_data_classes import PrintData
 from utils.callback_factory import ChoicePageRangeCallbackFactory, CancelPrintFileCallbackFactory, \
     CanselEnterPagesRangesCallbackFactory, ConfirmPrintFileCallbackFactory, ChoiceAmountCopiesCallbackFactory, \
@@ -103,7 +102,7 @@ async def handle_get_pages(message: types.Message, session: AsyncSession, state:
 
 
 @router.callback_query(PrintStates.getting_pages, CanselEnterPagesRangesCallbackFactory.filter())
-async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+async def handle_cancel_get_ranges(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession, _):
     await callback.message.answer(_("canceled"))
     info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
     info_message = await callback.message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
@@ -151,7 +150,7 @@ async def handle_get_amount_copies(message: types.Message, session: AsyncSession
 
 
 @router.callback_query(PrintStates.setting_copies, CancelChoiceAmountCopiesCallbackFactory.filter())
-async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, state: FSMContext,
+async def handle_cancel_get_ranges(callback: types.CallbackQuery, state: FSMContext,
                                    session: AsyncSession, _):
     await callback.message.answer(_("canceled"))
     info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
@@ -166,7 +165,7 @@ async def handle_cancel_get_ranges(callback: types.CallbackQuery, bot: Bot, stat
 
 
 @router.callback_query(PrintStates.setting_parameters, ConfirmPrintFileCallbackFactory.filter())
-async def handle_confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, session: AsyncSession, _):
+async def handle_confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
         await bot.edit_message_text(
             chat_id=user_data.chat_id,

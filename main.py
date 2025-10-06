@@ -25,7 +25,7 @@ from aiogram.fsm.storage.redis import RedisStorage
 from redis.asyncio import Redis
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-import states.printer
+import states.printer_state
 import handlers.user
 import utils.admin_utils
 import handlers.unprocessed_updates
@@ -64,7 +64,7 @@ async def main():
     # роутеры
     dp.include_router(utils.admin_utils.router)
     dp.include_router(handlers.user.router)
-    dp.include_router(states.printer.router)
+    dp.include_router(states.printer_state.router)
     dp.include_router(handlers.unprocessed_updates.router)
 
     if DEBUG:  # удаление состояний

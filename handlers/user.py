@@ -17,7 +17,7 @@ router = Router()
 
 @router.message(CommandStart(deep_link=True))
 @router.message(Command("start"))
-async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: CommandObject):
+async def cmd_start(message: Message, session: AsyncSession, command: CommandObject):
     # Регистрация пользователя
     user_id = message.from_user.id
     lang_code = message.from_user.language_code[:2]
@@ -66,7 +66,7 @@ async def cmd_start(message: Message, bot: Bot, session: AsyncSession, command: 
 
 
 @router.message(Command("admin"))
-async def admin(message: Message, session: AsyncSession, bot: Bot):
+async def admin(message: Message):
     if message.from_user.id in [1722948286]:
         await message.answer("Admin panel", reply_markup=get_admin_panel_keyboard())
     else:
@@ -76,7 +76,7 @@ async def admin(message: Message, session: AsyncSession, bot: Bot):
 @router.message(Command("snd"))
 async def send_message(message: Message, command: Command, bot: Bot):
     if message.from_user.id in [1722948286]:
-        args = command.args
+        args = command.args  # type: ignore
         try:
             user_id = args.split()[0]
             mess = " ".join(args.split()[1:])
@@ -90,7 +90,7 @@ async def send_message(message: Message, command: Command, bot: Bot):
 @router.message(Command("ban"))
 async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
     if message.from_user.id in [1722948286]:
-        args = command.args
+        args = command.args  # type: ignore
         try:
             db_user = await session.get(User, args)
             db_user.banned = 1
@@ -104,7 +104,7 @@ async def send_message(message: Message, session: AsyncSession, command: Command
 @router.message(Command("unban"))
 async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
     if message.from_user.id in [1722948286]:
-        args = command.args
+        args = command.args  # type: ignore
         try:
             db_user = await session.get(User, args)
             db_user.banned = 0
@@ -120,14 +120,17 @@ async def help_mess(message: Message, bot: Bot, session: AsyncSession, _):
     await send_help_message(session, message.from_user.id, bot, _)
 
 
-async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _, lang_code):
+async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _, lang_code=None):
     db_user = await session.get(User, user_id)
-    await bot.send_message(user_id, _("help", lang_code).format(db_user.group.name, db_user.group.sheets_per_day))
+    if lang_code:
+        await bot.send_message(user_id, _("help", lang_code).format(db_user.group.name, db_user.group.sheets_per_day))
+    else:
+        await bot.send_message(user_id, _("help").format(db_user.group.name, db_user.group.sheets_per_day))
 
 
 @router.message(Command("report"))
 async def report(message: Message, command: Command, bot: Bot, state: FSMContext, session: AsyncSession, _):
-    args = command.args
+    args = command.args  # type: ignore
     if not args:
         await message.answer(_("using_report"))
         return
