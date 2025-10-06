@@ -18,7 +18,7 @@ async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> 
         return False
     pages = message.text.replace(" ", "").split(",")
     last_number = 0
-    if set(message.text) - set("0123456789,-"):
+    if set(message.text) - set("0123456789,- "):
         await message.answer(_("wrong_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return False
     for q in pages:
