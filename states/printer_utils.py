@@ -91,7 +91,7 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
         _str += "\n"
         if pages_available:
-            pages_left = pages_available - (0 if pages_available is None else pages_available)
+            pages_left = pages_available - (0 if pages_to_print is None else pages_to_print)
             if pages_left >= 0:
                 _str += _("pages_available").format(str(pages_available), str(pages_left)) + "\n"
             else:
