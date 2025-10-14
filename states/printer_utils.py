@@ -11,6 +11,7 @@ from utils.keyboards import get_cancel_keyboard
 
 
 async def validate_pages_ranges(_, message: types.Message, pages_total: int) -> bool:
+    assert message.text is not None
     if len(message.text) > 100:
         await message.answer(_("too_much_length_of_range_of_pages"), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return False
@@ -66,7 +67,8 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
         copies_amount = user_data.copies
         pages_to_print = user_data.pages_to_print
 
-        pages_available = (await session.get(User, user_id)).pages_left
+        db_user = await session.get(User, user_id)
+        pages_available = db_user.pages_left if db_user else 0
 
         _str = ""
         if prefix:
@@ -89,7 +91,7 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
         _str += "\n"
         if pages_available:
-            pages_left = pages_available - pages_to_print
+            pages_left = pages_available - (0 if pages_available is None else pages_available)
             if pages_left >= 0:
                 _str += _("pages_available").format(str(pages_available), str(pages_left)) + "\n"
             else:
@@ -100,16 +102,16 @@ async def build_file_info_message(_, state: FSMContext, session: AsyncSession, u
 
 
 async def convert_file_size(file_size: int) -> str:
-    if file_size:
-        if file_size < 700:
-            file_size = str(file_size) + " B"
-        elif file_size < 700 * 1024:
-            file_size = str(round(file_size / 1024, 2)) + " KB"
-        else:
-            file_size = str(round(file_size / 1024 / 1024, 2)) + " MB"
-    return file_size
+    if file_size < 700:
+        _file_size = str(file_size) + " B"
+    elif file_size < 700 * 1024:
+        _file_size = str(round(file_size / 1024, 2)) + " KB"
+    else:
+        _file_size = str(round(file_size / 1024 / 1024, 2)) + " MB"
+    return _file_size
 
 async def validate_copies_amount(_, message: types.Message) -> bool:
+    assert message.text is not None
     try:
         copies = int(message.text)
     except ValueError:
@@ -121,8 +123,9 @@ async def validate_copies_amount(_, message: types.Message) -> bool:
     return True
 
 async def check_access_to_print(_, state: FSMContext, session: AsyncSession, user_id: int) -> bool:
-    pages_left = (await session.get(User, user_id)).pages_left
+    db_user = await session.get(User, user_id)
+    pages_left = db_user.pages_left if db_user else 0
     async with get_user_data(state, PrintData) as user_data:
-        if user_data.pages_to_print > pages_left:
+        if user_data.pages_to_print is None or user_data.pages_to_print > pages_left:
             return False
         return True

@@ -1,5 +1,4 @@
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from database.base import Base
 
 from database.models import Language
@@ -7,7 +6,7 @@ from database.models import Language
 DATABASE_URL = "sqlite+aiosqlite:///./bot.db"
 
 engine = create_async_engine(DATABASE_URL, echo=True)
-async_session_maker = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 async def init_db():
     async with engine.begin() as conn:

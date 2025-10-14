@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VT Print 0.1\n"
 "Report-Msgid-Bugs-To: t.me/j.artem\n"
-"POT-Creation-Date: 2025-10-05 20:26+0300\n"
+"POT-Creation-Date: 2025-10-10 00:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,149 +17,153 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:13
-#: handlers/user.py:158
+#: handlers/unprocessed_updates.py:8 handlers/unprocessed_updates.py:16
+#: handlers/user.py:161
 msgid "to_start_work_send_pdf"
 msgstr ""
 
-#: handlers/unprocessed_updates.py:12
+#: handlers/unprocessed_updates.py:13
+msgid "error_try_again"
+msgstr ""
+
+#: handlers/unprocessed_updates.py:15
 msgid "you_are_not_in_print_state"
 msgstr ""
 
-#: handlers/user.py:125
+#: handlers/user.py:126 handlers/user.py:128
 msgid "help"
 msgstr ""
 
-#: handlers/user.py:132
+#: handlers/user.py:135
 msgid "using_report"
 msgstr ""
 
-#: handlers/user.py:156
+#: handlers/user.py:159
 msgid "selected_language"
 msgstr ""
 
-#: states/printer.py:32
+#: states/printer_state.py:31
 msgid "file_is_not_pdf"
 msgstr ""
 
-#: states/printer.py:36
+#: states/printer_state.py:35
 msgid "file_is_too_big_max_is_20mb"
 msgstr ""
 
-#: states/printer.py:44
+#: states/printer_state.py:43
 msgid "file_processing_error"
 msgstr ""
 
-#: states/printer.py:75
+#: states/printer_state.py:75
 msgid "page_range_selecting_available_n_pages"
 msgstr ""
 
-#: states/printer.py:89
+#: states/printer_state.py:89
 msgid "too_many_pages_you_available_n"
 msgstr ""
 
-#: states/printer.py:96
+#: states/printer_state.py:96
 msgid "pages_ranges_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:106 states/printer.py:155
+#: states/printer_state.py:106 states/printer_state.py:155
 msgid "canceled"
 msgstr ""
 
-#: states/printer.py:123
+#: states/printer_state.py:123
 msgid "copies_amount_selecting_max_copies"
 msgstr ""
 
-#: states/printer.py:142
+#: states/printer_state.py:142
 msgid "copies_amount_all_pages_from_n_available"
 msgstr ""
 
-#: states/printer.py:173
+#: states/printer_state.py:173
 msgid "confirm_printing_file"
 msgstr ""
 
-#: states/printer.py:206
+#: states/printer_state.py:206
 msgid "file_sent_to_print"
 msgstr ""
 
-#: states/printer.py:209
+#: states/printer_state.py:209
 msgid "error_printing_file"
 msgstr ""
 
-#: states/printer.py:236
+#: states/printer_state.py:236
 msgid "print_canceled"
 msgstr ""
 
-#: states/printer_utils.py:17
+#: states/printer_utils.py:15
 msgid "too_much_length_of_range_of_pages"
 msgstr ""
 
-#: states/printer_utils.py:22 states/printer_utils.py:42
-#: states/printer_utils.py:45
+#: states/printer_utils.py:20 states/printer_utils.py:40
+#: states/printer_utils.py:43
 msgid "wrong_range_of_pages"
 msgstr ""
 
-#: states/printer_utils.py:79
+#: states/printer_utils.py:76
 msgid "file_name"
 msgstr ""
 
-#: states/printer_utils.py:81
+#: states/printer_utils.py:78
 msgid "file_size"
 msgstr ""
 
-#: states/printer_utils.py:83
+#: states/printer_utils.py:80
 msgid "pages_amount"
 msgstr ""
 
-#: states/printer_utils.py:87
+#: states/printer_utils.py:84
 msgid "pages_ranges"
 msgstr ""
 
-#: states/printer_utils.py:89
+#: states/printer_utils.py:86
 msgid "copies_amount"
 msgstr ""
 
-#: states/printer_utils.py:91
+#: states/printer_utils.py:88
 msgid "pages_to_print"
 msgstr ""
 
-#: states/printer_utils.py:97
+#: states/printer_utils.py:94
 msgid "pages_available"
 msgstr ""
 
-#: states/printer_utils.py:99
+#: states/printer_utils.py:96
 msgid "you_are_not_enough_pages_set_range_or_try_later"
 msgstr ""
 
-#: states/printer_utils.py:100
+#: states/printer_utils.py:97
 msgid "sure_to_print_or_change_params"
 msgstr ""
 
-#: states/printer_utils.py:119
+#: states/printer_utils.py:116
 msgid "please_enter_int"
 msgstr ""
 
-#: states/printer_utils.py:122
+#: states/printer_utils.py:119
 msgid "int_must_be_between_1_and_100"
 msgstr ""
 
-#: utils/keyboards.py:27
+#: utils/keyboards.py:25
 msgid "choice_page_range"
 msgstr ""
 
-#: utils/keyboards.py:29
+#: utils/keyboards.py:27
 msgid "choice_copies_amount"
 msgstr ""
 
-#: utils/keyboards.py:31
+#: utils/keyboards.py:29
 msgid "accept_print"
 msgstr ""
 
-#: utils/keyboards.py:33
+#: utils/keyboards.py:31
 msgid "cancel_print"
 msgstr ""
 
-#: utils/keyboards.py:39 utils/keyboards.py:45
+#: utils/keyboards.py:38 utils/keyboards.py:45
 msgid "cancel"
 msgstr ""
 

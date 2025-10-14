@@ -11,8 +11,9 @@ async def get_file(file_id: str, chat_id: int, bot: Bot):
     if file_id not in local_saved_files:
         async with ChatActionSender.upload_document(chat_id, bot, interval=10):
             async with tempfile.NamedTemporaryFile("wb", delete=False) as file:
-                await bot.download(file_id, file.name)
-                local_saved_files[file_id] = file.name
+                file_path = str(file.name)
+                await bot.download(file_id, file_path)
+                local_saved_files[file_id] = file_path
     return local_saved_files[file_id]
 
 

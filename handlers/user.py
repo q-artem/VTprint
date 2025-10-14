@@ -18,9 +18,10 @@ router = Router()
 @router.message(CommandStart(deep_link=True))
 @router.message(Command("start"))
 async def cmd_start(message: Message, session: AsyncSession, command: CommandObject):
+    assert message.from_user is not None
     # Регистрация пользователя
     user_id = message.from_user.id
-    lang_code = message.from_user.language_code[:2]
+    lang_code = "en" if message.from_user.language_code is None else message.from_user.language_code[:2]
     # нету аргументов
     if not command.args:
         if await session.get(User, user_id):
@@ -47,9 +48,9 @@ async def cmd_start(message: Message, session: AsyncSession, command: CommandObj
     db_user = await session.get(User, user_id)
     if not db_user:  # если нет в бд
         language = await session.get(Language, lang_code)
-        if not language:
+        if language is None:
             language = await session.get(Language, "en")
-        db_user = User(user_id=user_id, language_code=language.code, group_id=group.id, pages_left=group.sheets_per_day)
+        db_user = User(user_id=user_id, language_code=language.code if language is not None else "en", group_id=group.id, pages_left=group.sheets_per_day)
         session.add(db_user)
         await session.commit()
         await message.answer(
@@ -67,6 +68,7 @@ async def cmd_start(message: Message, session: AsyncSession, command: CommandObj
 
 @router.message(Command("admin"))
 async def admin(message: Message):
+    assert message.from_user is not None
     if message.from_user.id in [1722948286]:
         await message.answer("Admin panel", reply_markup=get_admin_panel_keyboard())
     else:
@@ -74,7 +76,8 @@ async def admin(message: Message):
 
 
 @router.message(Command("snd"))
-async def send_message(message: Message, command: Command, bot: Bot):
+async def snd_message(message: Message, command: Command, bot: Bot):
+    assert message.from_user is not None
     if message.from_user.id in [1722948286]:
         args = command.args  # type: ignore
         try:
@@ -88,12 +91,14 @@ async def send_message(message: Message, command: Command, bot: Bot):
 
 
 @router.message(Command("ban"))
-async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
+async def ban_user(message: Message, session: AsyncSession, command: Command, bot: Bot):
+    assert message.from_user is not None
     if message.from_user.id in [1722948286]:
         args = command.args  # type: ignore
         try:
             db_user = await session.get(User, args)
-            db_user.banned = 1
+            assert db_user is not None
+            db_user.banned = True
             await session.commit()
         except Exception as e:
             await bot.send_message(message.from_user.id, html.escape(str(e)))
@@ -103,11 +108,13 @@ async def send_message(message: Message, session: AsyncSession, command: Command
 
 @router.message(Command("unban"))
 async def send_message(message: Message, session: AsyncSession, command: Command, bot: Bot):
+    assert message.from_user is not None
     if message.from_user.id in [1722948286]:
         args = command.args  # type: ignore
         try:
             db_user = await session.get(User, args)
-            db_user.banned = 0
+            assert db_user is not None
+            db_user.banned = False
             await session.commit()
         except Exception as e:
             await bot.send_message(message.from_user.id, html.escape(str(e)))
@@ -117,11 +124,13 @@ async def send_message(message: Message, session: AsyncSession, command: Command
 
 @router.message(Command("help"))
 async def help_mess(message: Message, bot: Bot, session: AsyncSession, _):
+    assert message.from_user is not None
     await send_help_message(session, message.from_user.id, bot, _)
 
 
 async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _, lang_code=None):
     db_user = await session.get(User, user_id)
+    assert db_user is not None
     if lang_code:
         await bot.send_message(user_id, _("help", lang_code).format(db_user.group.name, db_user.group.sheets_per_day))
     else:
@@ -130,6 +139,7 @@ async def send_help_message(session: AsyncSession, user_id: int, bot: Bot, _, la
 
 @router.message(Command("report"))
 async def report(message: Message, command: Command, bot: Bot, state: FSMContext, session: AsyncSession, _):
+    assert message.from_user is not None
     args = command.args  # type: ignore
     if not args:
         await message.answer(_("using_report"))
@@ -147,6 +157,9 @@ async def report(message: Message, command: Command, bot: Bot, state: FSMContext
 
 @router.callback_query(F.data.startswith("set_lang:"))
 async def set_lang(callback: CallbackQuery, bot: Bot, session: AsyncSession, _):
+    if callback.data is None or callback.message is None:
+        callback.answer(_("error_try_again"))
+        return
     lang_code = callback.data.split(":")[1]
     user_id = callback.from_user.id
 
@@ -155,8 +168,10 @@ async def set_lang(callback: CallbackQuery, bot: Bot, session: AsyncSession, _):
         db_user.language_code = lang_code
         await session.commit()
 
+    db_lang_code = await session.get(Language, lang_code)
+    assert db_lang_code is not None
     await callback.message.answer(
-        _("selected_language", lang_code).format((await session.get(Language, lang_code)).name))
+        _("selected_language", lang_code).format(db_lang_code.name))
     await send_help_message(session, user_id, bot, _, lang_code)
     await callback.message.answer(_("to_start_work_send_pdf", lang_code))
     await callback.answer()

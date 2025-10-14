@@ -3,12 +3,12 @@ from pydantic import SecretStr
 
 
 class Settings(BaseSettings):
-    bot_token: SecretStr | None
-    balakshin_pass: SecretStr | None
-    vt_pass: SecretStr | None
-    prodmat_pass: SecretStr | None
-    elite_pass: SecretStr | None
-    admin_pass: SecretStr | None
+    bot_token: SecretStr
+    balakshin_pass: SecretStr
+    vt_pass: SecretStr
+    prodmat_pass: SecretStr
+    elite_pass: SecretStr
+    admin_pass: SecretStr
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
 
 config = Settings() # type: ignore

@@ -9,6 +9,7 @@ from utils.files_utils import get_file, delete_file
 
 
 async def print_file(user_data: PrintData, bot: Bot) -> bool:
+    assert user_data.file_id and user_data.chat_id
     file = await get_file(user_data.file_id, user_data.chat_id, bot)
     if not DEBUG:
         try:

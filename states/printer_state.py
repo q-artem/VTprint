@@ -25,7 +25,9 @@ router = Router()
 
 @router.message(F.content_type == ContentType.DOCUMENT)
 async def handle_document(message: types.Message, bot: Bot, session: AsyncSession, state: FSMContext, _):
-    assert message.document is not None  # на всякий случай
+    if message.document is None or message.document.file_name is None or message.document.file_size is None:
+        await message.answer(_("file_processing_error").format("Error processing file info"))
+        return
 
     if not (message.document.file_name.endswith(".pdf") and message.document.mime_type == "application/pdf"):
         await message.reply(_("file_is_not_pdf"))
@@ -52,6 +54,7 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
         pages_to_print=pages_total,  # страниц к печати
     ))
 
+    assert message.from_user is not None
     file_info = await build_file_info_message(_, state, session, message.from_user.id)
 
     info_message = await message.answer(file_info, reply_markup=get_print_file_menu_keyboard(_))
@@ -69,10 +72,11 @@ async def handle_document(message: types.Message, bot: Bot, session: AsyncSessio
 @router.callback_query(PrintStates.setting_parameters, ChoicePageRangeCallbackFactory.filter())
 async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
+        bd_user = await session.get(User, callback.from_user.id)
         await bot.edit_message_text(
             chat_id=user_data.chat_id,
             message_id=user_data.info_message_id,
-            text=_("page_range_selecting_available_n_pages").format(user_data.pages_total, (await session.get(User, callback.from_user.id)).pages_left),
+            text=_("page_range_selecting_available_n_pages").format(user_data.pages_total, bd_user.pages_left if bd_user else 0),
             reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory())
         )
     await state.set_state(PrintStates.getting_pages)
@@ -81,10 +85,16 @@ async def handle_choice_page_range(callback: types.CallbackQuery, bot: Bot, sess
 @router.message(PrintStates.getting_pages)
 async def handle_get_pages(message: types.Message, session: AsyncSession, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
+        if not user_data.pages_total:
+            await message.answer(_("file_processing_error").format("File not contains pages"))
+            return
         if not await validate_pages_ranges(_, message, user_data.pages_total):
             return
+    assert message.text is not None and message.from_user is not None
+
     pages_amount = await count_pages(message.text)
-    pages_left = (await session.get(User, message.from_user.id)).pages_left
+    db_user = await session.get(User, message.from_user.id)
+    pages_left = db_user.pages_left if db_user else 0
     if pages_amount > pages_left:
         await message.answer(_("too_many_pages_you_available_n").format(pages_amount), reply_markup=get_cancel_keyboard(_, CanselEnterPagesRangesCallbackFactory()))
         return
@@ -103,6 +113,7 @@ async def handle_get_pages(message: types.Message, session: AsyncSession, state:
 
 @router.callback_query(PrintStates.getting_pages, CanselEnterPagesRangesCallbackFactory.filter())
 async def handle_cancel_get_ranges(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession, _):
+    assert callback.message is not None
     await callback.message.answer(_("canceled"))
     info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
     info_message = await callback.message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
@@ -117,10 +128,11 @@ async def handle_cancel_get_ranges(callback: types.CallbackQuery, state: FSMCont
 @router.callback_query(PrintStates.setting_parameters, ChoiceAmountCopiesCallbackFactory.filter())
 async def handle_choice_amount_copies(callback: types.CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext, _):
     async with get_user_data(state, PrintData) as user_data:
+        bd_user = await session.get(User, callback.from_user.id)
         await bot.edit_message_text(
             chat_id=user_data.chat_id,
             message_id=user_data.info_message_id,
-            text=_("copies_amount_selecting_max_copies").format(user_data.pages_total, (await session.get(User, callback.from_user.id)).pages_left),
+            text=_("copies_amount_selecting_max_copies").format(user_data.pages_total, bd_user.pages_left if bd_user else 0),
             reply_markup=get_cancel_keyboard(_, CancelChoiceAmountCopiesCallbackFactory())
         )
     await state.set_state(PrintStates.setting_copies)
@@ -131,14 +143,19 @@ async def handle_choice_amount_copies(callback: types.CallbackQuery, bot: Bot, s
 async def handle_get_amount_copies(message: types.Message, session: AsyncSession, state: FSMContext, _):
     if not await validate_copies_amount(_, message):
         return
+    assert message.text is not None  # проверяется в validate_copies_amount
     copies_amount = int(message.text)
 
     async with get_user_data(state, PrintData) as user_data:
+        if not user_data.pages_to_print:
+            user_data.pages_to_print = 0
         user_data.pages_to_print = user_data.pages_to_print // user_data.copies * copies_amount
         user_data.copies = copies_amount
 
     # чтобы copies_amount записался
-    pages_left = (await session.get(User, message.from_user.id)).pages_left
+    assert message.from_user is not None
+    db_user = await session.get(User, message.from_user.id)
+    pages_left = db_user.pages_left if db_user else 0
     pref_info = _("copies_amount_all_pages_from_n_available").format(copies_amount, user_data.pages_to_print, pages_left)
     info_mess = await build_file_info_message(_, state, session, message.from_user.id, pref_info)
     info_message = await message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
@@ -150,8 +167,9 @@ async def handle_get_amount_copies(message: types.Message, session: AsyncSession
 
 
 @router.callback_query(PrintStates.setting_copies, CancelChoiceAmountCopiesCallbackFactory.filter())
-async def handle_cancel_get_ranges(callback: types.CallbackQuery, state: FSMContext,
+async def handle_cancel_set_copies(callback: types.CallbackQuery, state: FSMContext,
                                    session: AsyncSession, _):
+    assert callback.message is not None
     await callback.message.answer(_("canceled"))
     info_mess = await build_file_info_message(_, state, session, callback.from_user.id)
     info_message = await callback.message.answer(info_mess, reply_markup=get_print_file_menu_keyboard(_))
@@ -195,15 +213,20 @@ async def confirming_print_file(callback: types.CallbackQuery, bot: Bot, state: 
 
         is_printed = await print_file(user_data, bot)
 
+        assert callback.message is not None
         if is_printed:
-            user = await session.get(User, callback.from_user.id)
-            user.pages_left -= user_data.pages_to_print
+            db_user = await session.get(User, callback.from_user.id)
+            assert db_user is not None
+            if not user_data.pages_to_print:
+                await callback.message.answer(_("file_processing_error").format("Error counting pages to print"))
+                return
+            db_user.pages_left -= user_data.pages_to_print
             await session.commit()
 
             await bot.edit_message_text(
                 chat_id=user_data.chat_id,
                 message_id=user_data.info_message_id,
-                text=_("file_sent_to_print").format(user.pages_left),
+                text=_("file_sent_to_print").format(db_user.pages_left),
             )
         else:
             await callback.message.answer(_("error_printing_file"))
